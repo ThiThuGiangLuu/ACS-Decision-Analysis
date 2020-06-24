@@ -1,2 +1,2 @@
 # Acis Decision Analysis
- Cost-benefit of different agro-climate information options
+Repository that includes the input data table and R scripts for the application of Decision Analysis for forecasting agro-climate information service options in Vietnam
