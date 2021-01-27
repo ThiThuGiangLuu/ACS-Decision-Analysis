@@ -959,7 +959,7 @@
     "acis_inputs_EN.csv",
     outputPath = paste("MCResults",sep=""),
     welfareFunction = acis_costbenefit,
-    numberOfModelRuns = 1e4, #run 10,000 times
+    numberOfModelRuns = 1e2, #run 100 times for now
     functionSyntax = "plainNames")
 
 
