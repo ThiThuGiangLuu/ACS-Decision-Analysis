@@ -26,8 +26,26 @@
   # RISKS THAT IMPACTS BENEFITS
     # inaccurate forecast is one risk which it is on-going every season/year
     # adoption rate
+    # weather risks
     
-  # CALCULATING COSTS####
+    #CALCULATING UNCERTAINTY and RISKS####
+    # Drought risk for each year
+    drought_risk_i1234<-chance_event(chance_drought_i1234,value_if = 1, n=n_years)
+    # Risk of having events can cause re-fertilize
+    risk_refertilize_i1234<-chance_event(chance_refertilize_i1234,value_if = 1, n=n_years)
+    # Risk of re_sow due to extreme events (rain, cold) 
+    risk_resow_i1234<-chance_event(chance_resow_i1234,value_if = 1, n=n_years)
+    # Chance of having inaccurate weather forecast, intervention 1
+    inaccurate_forecast_i1<-chance_event(chance_inaccurate_forecast_i1,value_if = 1,n=n_years)
+    # Chance of having inaccurate weather forecast, intervention 2, 3, 4
+    inaccurate_forecast_i234<-chance_event(chance_inaccurate_forecast_i234,value_if = 1, n=n_years)
+    # Chance of having inaccurate drought forecast at the beginning of season intervention 1, 2, 3, 4
+    inaccurate_forecast_extreme_drought_i1234<-chance_event(chance_inaccurate_forecast_extreme_drought_i1234,value_if = 1, n=n_years)
+    # Extreme cold risk for each year
+    risk_extreme_cold<-chance_event(chance_extreme_cold,value_if = 1, n=n_years)
+    # Chance of having inaccurate extreme cold forecast 
+    inaccurate_forecast_extreme_cold_i1234<-chance_event(chance_inaccurate_forecast_extreme_cold_i1234,value_if = 1, n=n_years)
+    # CALCULATING COSTS####
     
     # I. Forecast generation####
     # 1. Set up new local met station for the whole project period (Intervention 1)
@@ -119,13 +137,13 @@
      # IV. Support the use and learning####
      
      # 9. Establish demonstration models (5000m2/season, 2models of 1ha/year) 
-     # for the whole project period (Intervention1234)
-     # Refer to section 1.3.2 for the calculation of fertilizer used for 1ha
-     cost_per_modeli1234<-((seed_applied_i1234*price_seed_i1234+
-                plant_protection_support_i1234)/exchange_rate+
-       fa_adv_cost_perha*percent_fertilizer_model_supporti1234)/2
-       
-     
+     # Total fertilizer cost per ha (Intervention1234)
+     fa_adv_cost_perha <-(NPK5105_advice_i1234*NPK5105_price_i1234+N_advice_i1234*N_price_i1234+
+                            K_advice_i1234*K_price_i1234)/exchange_rate
+     # Consider the partial support from the Government to develop demonstration model (5000m2~1/2ha)
+     cost_per_modeli1234<-((seed_advice_i1234*price_seed_i1234+
+      plant_protection_support_i1234)/exchange_rate+fa_adv_cost_perha*percent_fertilizer_model_supporti1234)/2
+      
      cost_model<-rep(0,n_years)
      cost_model[1:5]<-(model_training_i1234*n_training+no_model_compare_i1234*
      cost_per_modeli1234+model_monitor_i1234+field_visit_i1234)/
@@ -169,7 +187,7 @@
     #1. Rice benefits####
     #for all interventions in the condition of having good weather forecast
     #1.1. Advisories to cope with extreme drought####
-    #calculating drought risk for each year
+    #Refer to drought risk for each year
      drought_risk_i1234<-chance_event(chance_drought_i1234,value_if = 1, n=n_years)
     
     # drought area for each year 
@@ -245,9 +263,8 @@
          seed_rate_i4*effective_rate
       # 1.2.2. Benefits from reduced times of re-sowing####
       
-      # risk of re_sow due to extreme events (rain, cold) if business as usual 
-       risk_resow_i1234<-chance_event(chance_resow_i1234,value_if = 1, n=n_years)
-      
+      # Refer to risk of re_sow due to extreme events (rain, cold) if business as usual 
+      # risk_resow_i1234<-chance_event(chance_resow_i1234,value_if = 1, n=n_years)
       # taking into consideration of the chance to reduce the risk
        resow_reduced_i1234<-risk_resow_i1234*chance_resow_advice_i1234
        
@@ -257,6 +274,7 @@
        reduce_resow_costsperha_i1234<-(seed_baseline_i1234)*
                                         vv(price_seed_i1234, var_CV, 5)
        
+       inaccurate_forecast_i1<-chance_event(chance_inaccurate_forecast_i1,value_if = 1,n=n_years)
        benefit_time_seed_i1<-rep(0,n_years)
        benefit_time_seed_i1[1:5]<-resow_reduced_i1234*rice_area_effect*
                 (reduce_resow_costsperha_i1234+labor_seed_fertilize_i1234)*
@@ -264,7 +282,7 @@
          seed_rate_i1*effective_rate*(1-inaccurate_forecast_i1)/exchange_rate
            
       # Benefit for time reduction in sowing for intervention 2 
-       
+       inaccurate_forecast_i234<-chance_event(chance_inaccurate_forecast_i234,value_if = 1, n=n_years)
        benefit_time_seed_i2<-rep(0,n_years)
        benefit_time_seed_i2[1:5]<-resow_reduced_i1234*rice_area_effect*
          (reduce_resow_costsperha_i1234+labor_seed_fertilize_i1234)*
@@ -288,9 +306,9 @@
     # 1.3.1. Dose reduction####
     # for fertilizer per season per ha
        
-       benefit_dose_fer_perha<-((NPK5105f_baseline_i1234 -NPK5105a_dose_i1234)*NPK5105_price_i1234+
-            (Nf_baseline_i1234-Na_dose_i1234)*N_price_i1234+
-            (Kf_baseline_i1234-Ka_dose_i1234)*K_price_i1234)/exchange_rate
+       benefit_dose_fer_perha<-((NPK5105_baseline_i1234 -NPK5105_applied_i1234)*NPK5105_price_i1234+
+            (N_baseline_i1234-N_applied_i1234)*N_price_i1234+
+            (K_baseline_i1234-K_applied_i1234)*K_price_i1234)/exchange_rate
        
     # Benefit for dose reduction for intervention 1 
        # ferlizer and plant protection adoption rate 
@@ -298,7 +316,7 @@
                         rate_fer_pla_immi_i1,n_years,
                         dis_adoption_i123,rate_saturated_i12)
     # Benefit - For area, it needs to be discounted with potential area destroyed by 
-    # severe risks such as hailstone/flashflood
+    # annual severe risks such as hailstone/flashflood
        benefit_dose_fer_i1<-rep(0,n_years)
        benefit_dose_fer_i1[1:5]<-benefit_dose_fer_perha*rice_area_effect*
          (1-vv(rice_area_loss_severe_risks_i1234, var_CV,5))* rate_fer_pla_i1*effective_rate
@@ -336,19 +354,17 @@
        
              
     # 1.3.2. Benefit for fertilizing times reduction#### 
-    # risk of having events can cause re-fertilize
-       risk_fertilize_i1234<-chance_event(chance_refertilize_i1234,value_if = 1, n=n_years)
+    # Refer to risk of having events can cause re-fertilize
+    # risk_refertilize_i1234<-chance_event(chance_refertilize_i1234,value_if = 1, n=n_years)
     # taking into consideration of the chance to reduce the risk 
-       refertilize_reduced_i1234<-risk_fertilize_i1234*chance_refertilize_advice_i1234
+       refertilize_reduced_i1234<-risk_refertilize_i1234*chance_refertilize_advice_i1234
        
-       # cost for fertlizing for one ha using farmers'dose
+    # cost for fertlizing for one ha using farmers'dose
        
-       fa_fer_cost_perha<-(NPK5105f_baseline_i1234*NPK5105_price_i1234+
-                        Nf_baseline_i1234*N_price_i1234+
-                        Kf_baseline_i1234*K_price_i1234)/exchange_rate
-    # cost for fertlizing for one ha using advice's dose
-       fa_adv_cost_perha <-(NPK5105a_dose_i1234*NPK5105_price_i1234+Na_dose_i1234*N_price_i1234+Ka_dose_i1234*K_price_i1234)/exchange_rate
-       
+       fa_fer_cost_perha<-(NPK5105_baseline_i1234*NPK5105_price_i1234+
+                        N_baseline_i1234*N_price_i1234+
+                        K_baseline_i1234*K_price_i1234)/exchange_rate
+    
     # Benefit for time reduction for intervention 1 
        benefit_time_fer_i1<-rep(0,n_years)
        benefit_time_fer_i1[1:5]<-refertilize_reduced_i1234*rice_area_effect*
@@ -422,38 +438,39 @@
           rate_fer_pla_i4*effective_rate/exchange_rate
     #1.5. Rice yield benefit#### 
         # Rice yield benefit for Intervention 1
-        rice_benefit_change_i1<-rep(0,n_year)
+        rice_benefit_change_i1<-rep(0,n_years)
         rice_benefit_change_i1[1:5]<-rice_area_effect*
           (1-vv(rice_area_loss_severe_risks_i1234, var_CV,5))*
           vv(yield_change_i1234, var_CV, 5)*rice_price*
-          ((rate_farmers_seed_i1+2*rate_fer_pla_i1)/3)*effective_rate/exchange_rate
+          ((seed_rate_i1+2*rate_fer_pla_i1)/3)*effective_rate/exchange_rate
         # Rice yield benefit for Intervention 2
-        rice_benefit_change_i2<-rep(0,n_year)
+        rice_benefit_change_i2<-rep(0,n_years)
         rice_benefit_change_i2[1:5]<-rice_area_effect*
           (1-vv(rice_area_loss_severe_risks_i1234, var_CV,5))*
           vv(yield_change_i1234, var_CV, 5)*rice_price*
-          ((rate_farmers_seed_i2+2*rate_fer_pla_i2)/3)*effective_rate/exchange_rate
+          ((seed_rate_i2+2*rate_fer_pla_i2)/3)*effective_rate/exchange_rate
         # Rice yield benefit for Intervention 3
-        rice_benefit_change_i3<-rep(0,n_year)
+        rice_benefit_change_i3<-rep(0,n_years)
         rice_benefit_change_i3[1:5]<-rice_area_effect*
           (1-vv(rice_area_loss_severe_risks_i1234, var_CV,5))*
           vv(yield_change_i1234, var_CV, 5)*rice_price*
-          ((rate_farmers_seed_i3+2*rate_fer_pla_i3)/3)*effective_rate/exchange_rate
+          ((seed_rate_i3+2*rate_fer_pla_i3)/3)*effective_rate/exchange_rate
         # Rice yield benefit for Intervention 4
-        rice_benefit_change_i4<-rep(0,n_year)
+        rice_benefit_change_i4<-rep(0,n_years)
         rice_benefit_change_i4[1:5]<-rice_area_effect*
           (1-vv(rice_area_loss_severe_risks_i1234, var_CV,5))*
           vv(yield_change_i1234, var_CV, 5)*rice_price*
-          ((rate_farmers_seed_i4+2*rate_fer_pla_i4)/3)*effective_rate/exchange_rate
+          ((seed_rate_i4+2*rate_fer_pla_i4)/3)*effective_rate/exchange_rate
     #1.6. Discounting uncertainty of forecasts-accurate good weather forecast####    
     # Total benefit for rice: This benefit equal to total rice benefit in the 
     # good weather forecasts conditions discounting the inaccurate weather forecasts. 
     # When having negative effect. It does not normally affect all but just a part of that. For example, farmers do not need
     # to put all fertilizer back
     # Total benefit for rice intervention 1
-    inaccurate_forecast_i1<-chance_event(chance_inaccurate_forecast_i1,value_if = 1,n=n_years)
-    inacurate_forecast_i234<-chance_event(chance_inaccurate_forecast_i234,value_if = 1, n=n_years)
-    inaccurate_forecast_extreme_drought_i1234<-chance_event(chance_inaccurate_forecast_extreme_drought_i1234,value_if = 1, n=n_years)
+    #Refer to risks####
+    #inaccurate_forecast_i1<-chance_event(chance_inaccurate_forecast_i1,value_if = 1,n=n_years)
+    #inaccurate_forecast_i234<-chance_event(chance_inaccurate_forecast_i234,value_if = 1, n=n_years)
+    #inaccurate_forecast_extreme_drought_i1234<-chance_event(chance_inaccurate_forecast_extreme_drought_i1234,value_if = 1, n=n_years)
     
     total_rice_i1<-(1-inaccurate_forecast_extreme_drought_i1234)*reduced_drought_losses-
           (inaccurate_forecast_extreme_drought_i1234*rice_profit_no_drought*rice_drought_i1234/exchange_rate)+
@@ -664,9 +681,9 @@
     gender_benefiti1<-rep(0,n_years)
     gender_benefiti1[1]<-0
     gender_benefiti1[2:5]<-(vv(new_income_farm_peryear_i12,var_CV_high,4)*
-    vv(rate_farm,var_CV_high,4)*total_farm_households_i1234+
+    vv(rate_farm,var_CV_high,4)*total_farm_households_i1234[2:5]+
     vv(new_income_nonfarm_peryear_i12, var_CV_high,4)*
-    vv(rate_nonfarm,var_CV_high,4)*total_farm_households_i1234)*gender_coverage/exchange_rate
+    vv(rate_nonfarm,var_CV_high,4)*total_farm_households_i1234[2:5])*gender_coverage/exchange_rate
       
     # Benefit for social impacts intervention 2
     gender_benefiti2<-gender_benefiti1
@@ -783,21 +800,23 @@
     total_cost_i1e<-cost_new_met_station+cost_forecast_province+
       cost_translation+cost_capacity_communication+cost_rice_SMS+
       cost_animal_SMS+cost_model+ME_cost
+    
     total_benefiti1e<-total_rice_i1+buffalo_benefiti1+cow_benefiti1
     bottomline_benefiti1e=total_benefiti1e-total_cost_i1e
     NPV1e<-discount(bottomline_benefiti1e, discount_rate, calculate_NPV = TRUE)
+    
     #BCR Economic Intervention 1####
-    #discount_total_benefit_i1e<-discount(total_benefiti1e,discount_rate, calculate_NPV = TRUE)
-    #discount_total_cost_i1e<-discount(total_cost_i1e, discount_rate, calculate_NPV = TRUE)
-    #bcri1e<-discount_total_benefit_i1e/discount_total_cost_i1e
+    discount_total_benefit_i1e<-discount(total_benefiti1e,discount_rate, calculate_NPV = TRUE)
+    discount_total_cost_i1e<-discount(total_cost_i1e, discount_rate, calculate_NPV = TRUE)
+    bcri1e<-discount_total_benefit_i1e/discount_total_cost_i1e
     
     
     # Direct farm benefit for each rice household intervention 1####
-    ricebenefit_household1<-total_rice_i1/total_farm_households_i1234
+    #ricebenefit_household1<-total_rice_i1/total_farm_households_i1234
     
     # Direct farm benefit for each animal household intervention 1####
-    animalbenefit_household1<-(buffalo_benefiti1+cow_benefiti1)/
-      (percent_animal_households_i1234*total_farm_households_i1234)
+    #animalbenefit_household1<-(buffalo_benefiti1+cow_benefiti1)/
+      #(percent_animal_households_i1234*total_farm_households_i1234)
     
     # Total benefit intervention 2####
     total_benefiti2<-total_rice_i2+buffalo_benefiti2+cow_benefiti2+env_benefiti2+
@@ -819,20 +838,21 @@
     total_cost_i2e<-cost_forecast_province+cost_translation+
       cost_capacity_communication+cost_rice_SMS+cost_animal_SMS+
       cost_model+ME_cost
+   
     total_benefiti2e<-total_rice_i2+buffalo_benefiti2+cow_benefiti2
     bottomline_benefiti2e=total_benefiti2e-total_cost_i2e
     NPV2e<-discount(bottomline_benefiti2e, discount_rate, calculate_NPV = TRUE)
     #BCR Economic Intervention 2####
-    #discount_total_benefit_i2e<-discount(total_benefiti2e,discount_rate, calculate_NPV = TRUE)
-    #discount_total_cost_i2e<-discount(total_cost_i2e, discount_rate, calculate_NPV = TRUE)
-    #bcri2e<-discount_total_benefit_i2e/discount_total_cost_i2e
+    discount_total_benefit_i2e<-discount(total_benefiti2e,discount_rate, calculate_NPV = TRUE)
+    discount_total_cost_i2e<-discount(total_cost_i2e, discount_rate, calculate_NPV = TRUE)
+    bcri2e<-discount_total_benefit_i2e/discount_total_cost_i2e
     
     # Direct farm benefit for each rice household####
-    ricebenefit_household2<-total_rice_i2/total_farm_households_i1234
+    #ricebenefit_household2<-total_rice_i2/total_farm_households_i1234
     
     # Direct farm benefit for each animal household####
-    animalbenefit_household2<-(buffalo_benefiti2+cow_benefiti2)/
-      percent_animal_households_i1234*total_farm_households_i1234
+    #animalbenefit_household2<-(buffalo_benefiti2+cow_benefiti2)/
+      #percent_animal_households_i1234*total_farm_households_i1234
     
     # Total benefits intervention 3
     total_benefiti3<-total_rice_i3+buffalo_benefiti3+cow_benefiti3+env_benefiti3+
@@ -852,22 +872,23 @@
     
     
     #NPV economic Intervention 3####
+    #Total cost economic is equal total cost intervention 3
     
     total_benefiti3e<-total_rice_i3+buffalo_benefiti3+cow_benefiti3
     bottomline_benefiti3e=total_benefiti3e-total_cost_i3
     NPV3e<-discount(bottomline_benefiti3e, discount_rate, calculate_NPV = TRUE)
     
     #BCR Economic Intervention 3####
-    #discount_total_benefit_i3e<-discount(total_benefiti3e,discount_rate, calculate_NPV = TRUE)
-    #discount_total_cost_i3e<-discount(total_cost_i3e, discount_rate, calculate_NPV = TRUE)
-    #bcri3e<-discount_total_benefit_i3e/discount_total_cost_i3e
+    discount_total_benefit_i3e<-discount(total_benefiti3e,discount_rate, calculate_NPV = TRUE)
+    bcri3e<-discount_total_benefit_i3e/discount_total_cost_i3
     
-    # Direct farm benefit for each rice household#### Need to consider the adopted only####
-    ricebenefit_household3<-total_rice_i3/total_farm_households_i1234
+    # Direct farm benefit for each rice household#### 
+    #Need to consider the adopted only####
+    #ricebenefit_household3<-total_rice_i3/total_farm_households_i1234
     
     # Direct farm benefit for each animal household####
-    animalbenefit_household3<-(buffalo_benefiti3+cow_benefiti3)/
-      (percent_animal_households_i1234*total_farm_households_i1234)
+    #animalbenefit_household3<-(buffalo_benefiti3+cow_benefiti3)/
+     # (percent_animal_households_i1234*total_farm_households_i1234)
     
     # Total benefits intervention 4####
     total_benefiti4<-total_rice_i4+buffalo_benefiti4+cow_benefiti4+env_benefiti4+
@@ -879,25 +900,26 @@
     cum_cash_flowi4<-cumsum(cash_flowi4)
     # NPV Intervention 4####
     NPV4<-discount(bottomline_benefiti4, discount_rate, calculate_NPV = TRUE)
+    
     # Benefit-cost ratio intervention 4####
     discount_total_benefit_i4<-discount(total_benefiti4,discount_rate, calculate_NPV = TRUE)
     discount_total_cost_i4<-discount(total_cost_i4, discount_rate, calculate_NPV = TRUE)
     bcri4<-discount_total_benefit_i4/discount_total_cost_i4
     
     #NPV economic Intervention 4####
+    #Total cost economic is equal to total cost of intervention4
     total_benefiti4e<-total_rice_i4+buffalo_benefiti4+cow_benefiti4
     bottomline_benefiti4e=total_benefiti4e-total_cost_i4
     NPV4e<-discount(bottomline_benefiti4e, discount_rate, calculate_NPV = TRUE)
     #BCR Economic Intervention 4####
-    #discount_total_benefit_i4e<-discount(total_benefiti4e,discount_rate, calculate_NPV = TRUE)
-    #discount_total_cost_i4e<-discount(total_cost_i4e, discount_rate, calculate_NPV = TRUE)
-    #bcri4e<-discount_total_benefit_i4e/discount_total_cost_i4e
+    discount_total_benefit_i4e<-discount(total_benefiti4e,discount_rate, calculate_NPV = TRUE)
+    bcri4e<-discount_total_benefit_i4e/discount_total_cost_i4
     
     # Direct farm benefit for each rice household####
-    ricebenefit_household4<-total_rice_i4/total_farm_households_i1234
+    #ricebenefit_household4<-total_rice_i4/total_farm_households_i1234
     # Direct farm benefit for each animal household####
-    animalbenefit_household4<-(buffalo_benefiti4+cow_benefiti4)/
-      (percent_animal_households_i1234*total_farm_households_i1234)
+    #animalbenefit_household4<-(buffalo_benefiti4+cow_benefiti4)/
+      #(percent_animal_households_i1234*total_farm_households_i1234)
     
     #Compare option 3 and option 1 and 2
     option3_option1<-NPV3-NPV1
@@ -925,7 +947,12 @@
           NPV_economic_Intervention1<-NPV1e,
           NPV_economic_Intervention2<-NPV2e,
           NPV_economic_Intervention3<-NPV3e,
-          NPV_economic_Intervention4<-NPV4e))}
+          NPV_economic_Intervention4<-NPV4e,
+          Benefit_Cost_Ratio_Intervention1e<-bcri1e,
+          Benefit_Cost_Ratio_Intervention2e<-bcri2e,
+          Benefit_Cost_Ratio_Intervention3e<-bcri3e,
+          Benefit_Cost_Ratio_Intervention4e<-bcri4e))
+    }
   
   # Running the model ####
   decisionSupport::decisionSupport(

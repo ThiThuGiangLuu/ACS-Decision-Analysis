@@ -8,15 +8,15 @@ chance_inaccurate_forecast_i1,tnorm_0_1,0.2,0.3,Chance of inaccurate forecast in
 chance_inaccurate_forecast_i234,tnorm_0_1,0.35,0.4,"Chance of inaccurate forecast intervention 2,3,4"
 chance_inaccurate_forecast_extreme_cold_i1234,tnorm_0_1,0.2,0.25,Chance of inaccurate forecast for extreme cold risk
 chance_inaccurate_forecast_extreme_drought_i1234,tnorm_0_1,0.2,0.35,Chance of inaccurate forecast for extreme drought risk
-met_station_esta_i1,posnorm,695800000,765380000,Cost to establish miniweather station (VND)
-met_station_main_i1,posnorm,14700000,16170000,Cost to maintain miniweather station (VND)
-cost_forecasts_access_i1,posnorm,132450000,145695000,Cost to support farmers accessing weather forecast (VND)
-cost_weekly_forecasts_i1234,posnorm,24000000,27000000,Cost to provide weekly weather forecast (VND)
-cost_seasonal_forecasts_i1234,posnorm,24000000,27000000,Cost to provide seasonal weather forecast (VND)
-cost_cb_translation_staff_i1234,posnorm,8050000,8855000,Cost for training technical working group on reading forecast and producing advisories (VND)
+met_station_esta_i1,posnorm,695800000,765380000,Total cost to establish miniweather station (VND)
+met_station_main_i1,posnorm,14700000,16170000,Total cost to maintain miniweather station (VND)
+cost_forecasts_access_i1,posnorm,132450000,145695000,Total cost to support farmers accessing weather forecast (VND)
+cost_weekly_forecasts_i1234,posnorm,24000000,27000000,Cost to buy weekly weather forecast from Meteoroligical Station(VND)/year
+cost_seasonal_forecasts_i1234,posnorm,24000000,27000000,Cost to provide seasonal weather forecast from Meteoroligical Station(VND)/year
+cost_cb_translation_staff_i1234,posnorm,8050000,8855000,Cost for training technical working group on reading forecast and producing advisories (VND/training)
 cb_translation_n12,const,4,4,Number of capacity building trainings in year 1 and 2 (training)
 cb_translation_n345,const,2,2,Number of capacity building trainings in year 3 to 5 (training)
-cost_cb_commune_i1234,posnorm,16450000,18095000,"Cost for introducing and training commune, village levels about the service (VND)"
+cost_cb_commune_i1234,posnorm,16450000,18095000,"Cost for introducing and training commune, village levels about the service (VND/commue)"
 n_communes,const,21,21,Number of communes (commune)
 leftlet_year1_i1234,posnorm,5000,5500,Price of project leaflet printed (VND/leaflet)
 village_meeting_launch_i1234,posnorm,10000000,11000000,Cost to launch project in each village (VND/village)
@@ -26,7 +26,7 @@ cost_print_seasonal_bulletinA0_i1234,posnorm,35000,40000,Costs to print seasonal
 n_print_per_year,const,4,4,Number of seasonal bulletin per year (bulletin)
 n_per_village,const,4,4,Number of seasonal bulletin per village (bulletin)
 cost_per_SMS_i123,posnorm,680,800,Cost to send one message by phone (VND)
-messages_per_time_rice_i123,posnorm,2,3,Number of messages needed to send rice weekly bulletin per time (message/time)
+messages_per_time_rice_i123,posnorm,2,3,Number of messages needed to send for rice weekly bulletin per time (message/time)
 number_times_per_year_rice_i123,posnorm,48,53,Number of times to send rice weekly bulletin per year (time)
 baseline_farm_households_i1234,posnorm,18400,18440,Total farmhouseholds in the district before project intervention (household)
 baseline_households_i1234,posnorm,23000,23050,Total households in the district before project intervention (household)
@@ -40,7 +40,7 @@ months_per_year,const,12,12,Number of months per year that have message for anim
 allowance_bulletin_collect_time_short_i4,const,50000,50000,Allowance for village leader permonth to collect bulletin from commune at short distance (VND/month)
 times_per_month,const,4,4,Number of times that village leader need to collect bulletin from commune per month (time)
 percent_short_distance_i4,posnorm,0.65,0.75,Percentage of village leaders with short distance to commune
-allowance_bulletin_collect_time_long_i4,const,150000,150000,Allowance to village leaders to collect bulletin permonth to collect bulletin from commune at long distance (VND/month)
+allowance_bulletin_collect_time_long_i4,const,150000,150000,Allowance to village leaders to collect bulletin per month from commune at long distance (VND/month)
 no_model_compare_i1234,const,2,2,Number of demonstration models set up per year (models/year)
 model_training_i1234,posnorm,4500000,5000000,Costs to conduct training to set up models (VND/training)
 n_training,const,2,2,Number of trainings for demonstration model (training/model)
@@ -48,7 +48,7 @@ percent_fertilizer_model_supporti1234,const,0.6,0.6,Percentage of cost to suppor
 plant_protection_support_i1234,const,500000,500000,Cost to support pesticide per ha (VND/ha)
 model_monitor_i1234,posnorm,10000000,12000000,Cost to monitor demonstration model (VND/model)
 field_visit_i1234,posnorm,60000000,66000000,Cost for field visits to models (VND/model)
-SAA_TOT,posnorm,124000000,136400000,Cost fot TOT training on gender (VND)
+SAA_TOT,posnorm,124000000,136400000,Total cost fot TOT training on gender (VND)
 dialogue_village,posnorm,1000000,1100000,Cost for organizing gender dialogue (VND/dialogue)
 n_dialogues,const,5,5,Number of dialogues (dialogue) 
 cost_community_event,posnorm,10000000,11000000,Cost for organizing community event (VND/event)
@@ -61,6 +61,7 @@ reduce_loss_drought_i1234,norm,21000000,26000000,Input costs per ha saved thanks
 rice_profit_no_drought,norm,8000000,12000000,Loss per ha if advices on drought is inaccurate (VND/ha)
 seed_baseline_i1234,posnorm,80,140,Seeds used by farmers per ha (kg/ha)
 seed_applied_i1234,posnorm,70,110,"Seeds applied after having advice (kg/ha), not all farmers reach the recommended seeds as 70-80kg/ha "
+seed_advice_i1234,posnorm,70,80,Seeds adviced (kg/ha)
 price_seed_i1234,posnorm,20000,30000,Seed price per kg (VND/kg)
 labor_pick_i1234,posnorm,750000,1200000,Labor costs for weeding per ha increased due to using excess seeds (VND/ha)
 rate_seed_inno_i1,posnorm,0.2,0.3,Rate of innovation farmer intervention 1 applying advisories on seed
@@ -80,14 +81,17 @@ chance_resow_i1234,tnorm_0_1,0.35,0.65,Chance to resow due to climate risks
 chance_resow_advice_i1234,norm,0.7,0.9,Percent of risks (natural and human made) that is possible to be addressed by advisories
 resow_fer_area_percentage_i1234,norm,0.2,0.4,Average percentage of area affected (resow or refertilize) when having risk
 labor_seed_fertilize_i1234,norm,500000,800000,Cost for labor to resow or refertilize per ha (VND/ha)
-NPK5105f_baseline_i1234,posnorm,500,650,Dose of NPK5105 baseline used by farmers per ha (kg/ha)
-NPK5105a_dose_i1234,posnorm,500,550,"Dose of NPK5105 applied per ha (kg/ha) after having advice, advice is 500kg/ha"
+NPK5105_baseline_i1234,posnorm,500,650,Dose of NPK5105 baseline used by farmers per ha (kg/ha)
+NPK5105_applied_i1234,posnorm,500,550,"Dose of NPK5105 applied per ha (kg/ha) after having advice, advice is 500kg/ha"
+NPK5105_advice_i1234,const,500,500,NPK adviced (500kg/ha)
 NPK5105_price_i1234,posnorm,9000,10000,Price of NPK5105 per kg (VND/kg)
-Nf_baseline_i1234,posnorm,250,500,Dose of urea baseline used by farmers per ha (kg/ha)
-Na_dose_i1234,posnorm,140,230,"Dose of urea applied per ha (kg/ha) after having advice, advice is 140kg/ha"
+N_baseline_i1234,posnorm,250,500,Dose of urea baseline used by farmers per ha (kg/ha)
+N_applied_i1234,posnorm,140,230,"Dose of urea applied per ha (kg/ha) after having advice, advice is 140kg/ha"
+N_advice_i1234,const,140,140,Nitrogen adviced (140kg/ha)
 N_price_i1234,posnorm,10000,12000,Price of urea per kg (VND)
-Kf_baseline_i1234,posnorm,5,100,Dose of kali baseline used by farmers per ha (kg/ha)
-Ka_dose_i1234,const,140,140,"Dose of kali applied per ha (kg/ha) after having advice, advice is 140kg/ha"
+K_baseline_i1234,posnorm,5,60,Dose of kali baseline used by farmers per ha (kg/ha)
+K_applied_i1234,posnorm,50,140,"Dose of kali applied per ha (kg/ha) after having advice, advice is 140kg/ha"
+K_advice_i1234,const,140,140,K adviced (140kg/ha)
 K_price_i1234,posnorm,11000,14000,Price of kali per kg (VND)
 rice_area_loss_severe_risks_i1234,posnorm,0.02,0.2,"Percentage of annual destroyed cultivating land due to severe risks, typically flash flood, hailstone"
 chance_refertilize_i1234,tnorm_0_1,0.17,0.4,Chance of refertilize due to risks (climate and human made)
