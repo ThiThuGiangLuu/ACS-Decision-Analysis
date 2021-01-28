@@ -952,7 +952,8 @@
           Benefit_Cost_Ratio_Intervention2e<-bcri2e,
           Benefit_Cost_Ratio_Intervention3e<-bcri3e,
           Benefit_Cost_Ratio_Intervention4e<-bcri4e))
-    }
+  }
+  
   
   # Running the model ####
   decisionSupport::decisionSupport(
