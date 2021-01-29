@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+  #Giang tests##
+>>>>>>> 3f9b846e83806a5a876557c39fca7e2caba5e558
   #install.packages("decisionSupport")
   library(decisionSupport)
   #no comma in number in dataset
