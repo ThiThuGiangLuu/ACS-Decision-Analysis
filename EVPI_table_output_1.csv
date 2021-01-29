@@ -1,4 +1,4 @@
-"","variable","expected_gain","EVPI_do","EVPI_dont"
+#est#"","variable","expected_gain","EVPI_do","EVPI_dont"
 "n_years","n_years",NA,0,0
 "discount_rate","discount_rate",8524136.72142957,0,8524136.72142957
 "var_CV","var_CV",8640620.50315055,0,8640620.50315055
