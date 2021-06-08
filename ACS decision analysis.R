@@ -1,6 +1,6 @@
 
- #install.packages("decisionSupport")
- library(decisionSupport)
+  #install.packages("decisionSupport")
+  library(decisionSupport)
   #no comma in number in dataset
   
   make_variables<-function(est,n=1)
