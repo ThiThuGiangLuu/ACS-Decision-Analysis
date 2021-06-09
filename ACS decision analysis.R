@@ -927,7 +927,6 @@
     #CW Note ####
     #keeping this output simple for now (just to test)
     #use the  = and not the <- in the return list. 
-    #
     return(list(
           NPV_Intervention1 = NPV1,
           NPV_Intervention2 = NPV2,
