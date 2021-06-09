@@ -13,19 +13,22 @@
   
   acis_costbenefit <- function(x, varnames){
     
-    # i1: risk/cost/benefit for intervention1
-    # i2: risk/cost/benefit for intervention1
-    # i3: risk/cost/benefit for intervention1
-    # i4: risk/cost/benefit for intervention4
-    # i12: risk/cost/benefit for intervention12
-    # i234: risk/cost/benefit for intervention234
-    # i34: risk/cost/benefit for intervention34
-    # i1234: risk/cost/benefit for intervention1234
+    # Intervention 1: Weather station-SMS-gender
+    # Intervention 2: SMS-gender
+    # Intervention 3: SMS-loudspeaker
+    # Intervention 4: Paper-loudspeaker
+    # i1: risk/cost/benefit variable incurred for intervention1
+    # i2: risk/cost/benefit variable incurred for intervention2
+    # i3: risk/cost/benefit variable incurred for intervention3
+    # i4: risk/cost/benefit variable incurred for intervention4
+    # i12: risk/cost/benefit variable incurred for intervention1 and intervention 2
+    # i234: risk/cost/benefit for intervention2, intervention3 and intervention 4
+    # i34: risk/cost/benefit for intervention3 and intervention 4
+    # i1234: risk/cost/benefit for all intervention1, intervention2, intervention 3 and intervention 4
   
   # RISKS THAT IMPACTS BENEFITS
-    # inaccurate forecast is one risk which it is on-going every season/year
-    # adoption rate
-    # weather risks
+    # inaccurate forecast:  risk which is on-going every season/year
+    # weather risks: risk which is on-going every season/year
     
     #CALCULATING UNCERTAINTY and RISKS####
     # Drought risk for each year
@@ -44,9 +47,10 @@
     risk_extreme_cold<-chance_event(chance_extreme_cold,value_if = 1, n=n_years)
     # Chance of having inaccurate extreme cold forecast 
     inaccurate_forecast_extreme_cold_i1234<-chance_event(chance_inaccurate_forecast_extreme_cold_i1234,value_if = 1, n=n_years)
+    
     # CALCULATING COSTS####
     
-    # I. Forecast generation####
+  # I. Forecast generation####
     # 1. Set up new local met station for the whole project period (Intervention 1)
     cost_new_met_station<-rep(0,n_years)
     cost_new_met_station[1]<-(met_station_esta_i1+vv(met_station_main_i1, var_CV,1)+
@@ -58,7 +62,7 @@
     cost_forecast_province<-rep(0,n_years)
     cost_forecast_province[1:5]<-(cost_weekly_forecasts_i1234+
                                     cost_seasonal_forecasts_i1234)/exchange_rate
-    #II. Translation####
+  #II. Translation####
     
     # 3. Translation from forecasts (training on translation) to advisory costs 
     #for the whole project period (Intervention1234)
@@ -68,17 +72,17 @@
       cb_translation_n12/exchange_rate
     cost_translation[3:5]<-vv(cost_cb_translation_staff_i1234, var_CV,3)*
       cb_translation_n345/exchange_rate
-    #III. Transfer####
+  #III. Transfer####
     # Calculating total households and farm households in 5 years
     # https://socratic.org/questions/how-do-you-calculate-population-growth
-  time<-1:n_years
-  total_households_i1234<-vv(baseline_households_i1234, var_CV, n_years)*
+    time<-1:n_years
+    total_households_i1234<-vv(baseline_households_i1234, var_CV, n_years)*
       exp(household_increase_rate*time)
     
-  total_farm_households_i1234<-vv(baseline_farm_households_i1234, var_CV, n_years)*
+    total_farm_households_i1234<-vv(baseline_farm_households_i1234, var_CV, n_years)*
       exp(household_increase_rate*time)
     
- # 4. Transfer and communication costs: district and commune/village for 
+    # 4. Transfer and communication costs: district and commune/village for 
     #the whole project period (Intervention1234)
     cost_capacity_communication<-rep(0,n_years)
     cost_capacity_communication[1]<-(vv(cost_cb_commune_i1234,var_CV,1)*n_communes+
@@ -133,7 +137,7 @@
          vv(1-percent_short_distance_i4,var_CV,5)*
          times_per_month*months_per_year*n_village)/exchange_rate 
      
-     # IV. Support the use and learning####
+   # IV. Support the use and learning####
      
      # 9. Establish demonstration models (5000m2/season, 2models of 1ha/year) 
      # Total fertilizer cost per ha (Intervention1234)
@@ -154,7 +158,7 @@
      cost_gender[1]<-(SAA_TOT+dialogue_village*n_dialogues*n_village+
                           cost_community_event*n_village)/exchange_rate 
      cost_gender[2:5]<-0
-     #V. Monitoring ####
+  # V. Monitoring ####
      # 11. Monitoring and Evaluation for the whole project period (Intervention1234)
      ME_cost<-rep(0,n_years)
      ME_cost[0:2]<-0
@@ -609,7 +613,7 @@
                            animal_rate_i4*effective_rate/exchange_rate)*
                            (1-2*inaccurate_forecast_extreme_cold_i1234)
         
-    # II. ENVIRONMENT####
+  # II. ENVIRONMENT####
     # Benefit for environment intervention 1 with good forecast assumption
     # 1. Fish benefits####
     #Assuming that % farmers who apply plant protection advices will not harm the fishes
@@ -675,7 +679,7 @@
     # Total environmental benefit 4
     env_benefiti4<-fish_benefiti4+water_benefiti4
     
-    # III. SOCIAL IMPACTS####
+  # III. SOCIAL IMPACTS####
     # Benefit for social impacts intervention 1
     gender_benefiti1<-rep(0,n_years)
     gender_benefiti1[1]<-0
@@ -695,7 +699,7 @@
     gender_benefiti4<-rep(0,n_years)
     gender_benefiti4[1:5]<-0
     
-    # IV.HEALTH IMPACTS####
+  # IV.HEALTH IMPACTS####
     
     # Reduced expenditure on health
     health_impacti1<-rep(0,n_years)
@@ -740,7 +744,7 @@
     # total human impact intervention 4
     health_impacti4
     
-    # V.GHG emission reduction####
+  # V.GHG emission reduction####
     #GHG reduction intervention 1
     GHG_impactsi1<-rep(0,n_years)
     GHG_impactsi1[1:5]<-(vv(methan_reduction_co2eq,var_CV_high,5)+
