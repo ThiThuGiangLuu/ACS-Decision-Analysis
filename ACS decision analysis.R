@@ -31,12 +31,8 @@
     # Drought risk for each year
     drought_risk_i1234<-chance_event(chance_drought_i1234,value_if = 1, n=n_years)
     # Risk of having events can cause re-fertilize
-    # CW Note ####
-    # chance_refertilize_i1234 not found
     risk_refertilize_i1234<-chance_event(chance_refertilize_i1234,value_if = 1, n=n_years)
     # Risk of re_sow due to extreme events (rain, cold) 
-    # # CW Note ####
-    # chance_resow_i1234 not found
     risk_resow_i1234<-chance_event(chance_resow_i1234,value_if = 1, n=n_years)
     # Chance of having inaccurate weather forecast, intervention 1
     inaccurate_forecast_i1<-chance_event(chance_inaccurate_forecast_i1,value_if = 1,n=n_years)
@@ -952,12 +948,16 @@
     numberOfModelRuns = 1e3, #run 1,000 times
     functionSyntax = "plainNames"
   )
+
+  # CW Note ####
+  # Use the plot_distributions to look at the NPV comparisons
   
   decisionSupport::plot_distributions(mcSimulation_object = mcSimulation_results, 
                                       vars = c("NPV_Intervention1", "NPV_Intervention2"),
                                       method = 'smooth_simple_overlay', 
                                       base_size = 7)
   
+
   
  
  
