@@ -926,44 +926,43 @@
     option3_option2<-NPV3-NPV2
     
     return(list(
-          NPV_Intervention1<-NPV1,
-          NPV_Intervention2<-NPV2,
-          NPV_Intervention3<-NPV3,
-          NPV_Intervention4<-NPV4,
-          option3_option1<-NPV3-NPV1,
-          option3_option2<-NPV3-NPV2,
-          Benefit_Cost_Ratio_Intervention1<-bcri1, 
-          Benefit_Cost_Ratio_Intervention2<-bcri2,
-          Benefit_Cost_Ratio_Intervention3<-bcri3, 
-          Benefit_Cost_Ratio_Intervention4<-bcri4,
-          cum_cash_Intervention1<-cum_cash_flowi1,
-          cum_cash_Intervention2<-cum_cash_flowi2, 
-          cum_cash_Intervention3<-cum_cash_flowi3, 
-          cum_cash_Intervention4<-cum_cash_flowi4,
-          total_costs_intervention1<-total_cost_i1,
-          total_costs_intervention2<-total_cost_i2,
-          total_costs_intervention3<-total_cost_i3,
-          total_costs_intervention4<-total_cost_i4,
-          NPV_economic_Intervention1<-NPV1e,
-          NPV_economic_Intervention2<-NPV2e,
-          NPV_economic_Intervention3<-NPV3e,
-          NPV_economic_Intervention4<-NPV4e,
-          Benefit_Cost_Ratio_Intervention1e<-bcri1e,
-          Benefit_Cost_Ratio_Intervention2e<-bcri2e,
-          Benefit_Cost_Ratio_Intervention3e<-bcri3e,
-          Benefit_Cost_Ratio_Intervention4e<-bcri4e))
-    }
+          NPV_Intervention1=NPV1,
+          NPV_Intervention2=NPV2,
+          NPV_Intervention3=NPV3,
+          NPV_Intervention4=NPV4,
+          option3_option1=NPV3-NPV1,
+          option3_option2=NPV3-NPV2,
+          Benefit_Cost_Ratio_Intervention1=bcri1, 
+          Benefit_Cost_Ratio_Intervention2=bcri2,
+          Benefit_Cost_Ratio_Intervention3=bcri3, 
+          Benefit_Cost_Ratio_Intervention4=bcri4,
+          Intervention1_total_costs=total_cost_i1,
+          Intervention2_total_costs=total_cost_i2,
+          Intervention3_total_costs=total_cost_i3,
+          Intervention4_total_costs=total_cost_i4
+          ))
+  }
   
   # Running the model ####
   decisionSupport::decisionSupport(
-    "acis_inputs_EN.csv",
-    outputPath = paste("MCResults",sep=""),
-    welfareFunction = acis_costbenefit,
-    numberOfModelRuns = 1e4, #run 10,000 times
-    functionSyntax = "plainNames")
+  "acis_inputs_EN.csv",
+  outputPath = paste("MCResults",sep=""),
+  welfareFunction = acis_costbenefit,
+  numberOfModelRuns = 1e4, #run 10,000 times
+  functionSyntax = "plainNames")
   
-
+  # Another option to run the model with handy results (not many folders but only 
+  #the input and output variable simulations)
+  #https://cran.r-project.org/web/packages/decisionSupport/vignettes/example_decision_function.html
+  #mcSimulation_results <- decisionSupport::mcSimulation(
+    #estimate = decisionSupport::estimate_read_csv("acis_inputs_EN.csv"),
+    #model_function = acis_costbenefit,
+    #numberOfModelRuns = 1e4, #run 1,000 times
+    #functionSyntax = "plainNames")
   
+  #write.csv(mcSimulation_results$x, file="x.csv")
+  #write.csv(mcSimulation_results$y, file="y.csv")
+ 
   
  
  
