@@ -1,4 +1,3 @@
-#Update
 library(cowplot)
 library(decisionSupport)
 library(dplyr)
