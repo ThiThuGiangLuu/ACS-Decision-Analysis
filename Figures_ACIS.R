@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 
+=======
+>>>>>>> 5418eaa82488581d05a3024710e27a0a752757d2
 library(cowplot)
 library(decisionSupport)
 library(dplyr)
