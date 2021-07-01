@@ -58,10 +58,10 @@ total_rice_area_i1234,const,9336,9336,Total planted rice area in the district fo
 rice_area_drought_i1234,posnorm,60,200,Area at risk of drought per year (ha/year),Area risk drought
 chance_drought_i1234,tnorm_0_1,0.125,0.5,Chance of having extreme drought (%),Chance of extreme drought 
 reduce_loss_drought_i1234,norm,21000000,26000000,Input costs per ha saved thanks to applying drought advice (VND/ha),Input costs saved drought 
-rice_profit_no_drought,norm,8000000,12000000,Loss per ha if advices on drought is inaccurate (VND/ha),Loss per ha if advices on drought is inaccurate (VND)
-seed_baseline_i1234,posnorm,80,140,Seeds used by farmers per ha (kg/ha),Baseline seeds per ha
-seed_applied_i1234,posnorm,70,110,"Seeds applied after having advice (kg/ha), not all farmers reach the recommended seeds as 70-80kg/ha ",Seeds applied after advice per ha
-seed_advice_i1234,posnorm,70,80,Seeds adviced (kg/ha),Seeds adviced per ha
+rice_profit_no_drought,norm,8000000,12000000,Loss per ha if advices on drought is inaccurate (VND/ha),Loss per ha if advice on drought is inaccurate (VND)
+seed_baseline_i1234,posnorm,80,140,Seeds used by farmers per ha (kg/ha),Baseline seed per ha
+seed_applied_i1234,posnorm,70,110,"Seeds applied after having advice (kg/ha), not all farmers reach the recommended seeds as 70-80kg/ha ",Seed per ha applied after advice 
+seed_advice_i1234,posnorm,70,80,Seed advised (kg/ha),Seed advised per ha
 price_seed_i1234,posnorm,20000,30000,Seed price per kg (VND/kg),Seed price
 labor_pick_i1234,posnorm,750000,1200000,Labor costs for weeding per ha increased due to using excess seeds (VND/ha),Labor weeding increased
 rate_seed_inno_i1,posnorm,0.2,0.3,Rate early seed adopter intervention 1 (%),Rate early seed adopter i1
@@ -76,22 +76,22 @@ rate_saturated_i12,posnorm,0.55,0.65,Saturated rate intervention i12 (%),Saturat
 rate_saturated_i34,posnorm,0.7,0.75,Saturated rate intervention i34 (%),Saturated rate i34
 dis_adoption_i123,norm,0.005,0.05,Annual disadoption rate intervention 123,Annual disadoption rate i123
 dis_adoption_i4,norm,0.05,0.3,Annual disadoption rate intervention 4,Annual disadoption rate i4
-effective_rate,posnorm,0.4,0.65,Percentage of farmers apply advice effectively among the adopted ones (%),Rate of farmers apply advice effectively
+effective_rate,posnorm,0.4,0.65,Percentage of farmers applying advice effectively among the adopted ones (%),Rate of farmers applying advice effectively
 chance_resow_i1234,tnorm_0_1,0.35,0.65,Chance to resow due to climate risks (%),Chance resow 
 chance_resow_advice_i1234,norm,0.7,0.9,Percent of risks (natural and human made) that is possible to be addressed by advice (%),Percent of risks addressed
 resow_fer_area_percentage_i1234,norm,0.2,0.4,Average percentage of area affected (resow or refertilize) when having risk (%),Percentage affected by risk
 labor_seed_fertilize_i1234,norm,500000,800000,Cost for labor to resow or refertilize per ha (VND/ha),Labor to resow or refertilize
 NPK5105_baseline_i1234,posnorm,500,650,Dose of NPK5105 baseline used by farmers per ha (kg/ha),Baseline NPK5105 per ha
 NPK5105_applied_i1234,posnorm,500,550,"Dose of NPK5105 applied per ha (kg/ha) after having advice, advice is 500kg/ha",NPK5105 applied after advice per ha
-NPK5105_advice_i1234,const,500,500,NPK adviced (500kg/ha),NPK5105 adviced per ha
+NPK5105_advice_i1234,const,500,500,NPK advised (500kg/ha),NPK5105 advised per ha
 NPK5105_price_i1234,posnorm,9000,10000,Price of NPK5105 per kg (VND/kg),Price NPK5105 
 N_baseline_i1234,posnorm,250,500,Dose of urea baseline used by farmers per ha (kg/ha),Baseline urea per ha
-N_applied_i1234,posnorm,140,230,"Dose of urea applied per ha (kg/ha) after having advice, advice is 140kg/ha",Urea applied after adviced per ha
-N_advice_i1234,const,140,140,Nitrogen adviced (140kg/ha),Urea adviced per ha
+N_applied_i1234,posnorm,140,230,"Dose of urea applied per ha (kg/ha) after having advice, advice is 140kg/ha",Urea per ha applied after advice
+N_advice_i1234,const,140,140,Urea advised (140kg/ha),Urea advised per ha
 N_price_i1234,posnorm,10000,12000,Price of urea per kg (VND),Price urea
-K_baseline_i1234,posnorm,5,60,Dose of kali baseline used by farmers per ha (kg/ha),Baseline potassium perha
-K_applied_i1234,posnorm,50,140,"Dose of kali applied per ha (kg/ha) after having advice, advice is 140kg/ha",Potassium applied after adviced per ha
-K_advice_i1234,const,140,140,K adviced (140kg/ha),Kali adviced
+K_baseline_i1234,posnorm,5,60,Dose of kali baseline used by farmers per ha (kg/ha),Baseline potassium per ha
+K_applied_i1234,posnorm,50,140,"Dose of kali applied per ha (kg/ha) after having advice, advice is 140kg/ha",Potassium per ha applied after advice
+K_advice_i1234,const,140,140,Kali advised (140kg/ha),Kali advised per ha
 K_price_i1234,posnorm,11000,14000,Price of kali per kg (VND),Price potassium
 rice_area_loss_severe_risks_i1234,posnorm,0.02,0.2,"Percentage of annual destroyed cultivating land due to severe risks, typically flash flood, hailstone (%)",Rice area lost by severe risks
 chance_refertilize_i1234,tnorm_0_1,0.17,0.4,Chance of refertilize due to risks (climate and human made) (%),Chance refertilize
@@ -99,7 +99,7 @@ chance_refertilize_advice_i1234,tnorm_0_1,0.7,0.9,Percent of risks that is possi
 rate_fer_pla_inno_i1,posnorm,0.2,0.3,Rate early fertilizer and pesticide adopter intervention 1 (%),"Rate early fertilizer, pesticide adopter i1"
 rate_fer_pla_immi_i1,posnorm,0.25,0.35,Rate of farmer who adopt advice on fertilizer and pesticide as impact of interpersonal exchange from previous adopter intervention 1 (%),"Rate fertilizer, pesticide adopter via exchange i1"
 rate_fer_pla_inno_i2,posnorm,0.15,0.25,Rate early fertilizer and pesticide adopter intervention 2 (%),"Rate early fertilizer, pesticide adopter i2"
-rate_fer_pla_immi_i2,posnorm,0.25,0.35,Rate of farmer who adopt advice on fertilizer and pesticide as impact of interpersonal exchange from previous adopter intervention 2 (%),"Rate fertilizer, pesticide adopter via exchange i2,"
+rate_fer_pla_immi_i2,posnorm,0.25,0.35,Rate of farmer who adopt advice on fertilizer and pesticide as impact of interpersonal exchange from previous adopter intervention 2 (%),"Rate fertilizer, pesticide adopter via exchange i2"
 rate_fer_pla_inno_i3,posnorm,0.25,0.35,Rate early fertilizer and pesticide adopter intervention 3 (%),"Rate early fertilizer, pesticide adopter i3"
 rate_fer_pla_immi_i3,posnorm,0.25,0.35,Rate of farmer who adopt advice on fertilizer and pesticide as impact of interpersonal exchange from previous adopter intervention 3 (%),"Rate fertilizer, pesticide adopter via exchange i3"
 rate_fer_pla_inno_i4,posnorm,0.25,0.35,Rate early fertilizer and pesticide adopter intervention 4 (%),"Rate early fertilizer, pesticide adopter i4"
@@ -133,9 +133,9 @@ lost_fish_i1234,posnorm,15000000,30000000,Fish loss due to pesticide per one tho
 reduced_water_expenditure_i1234,posnorm,500,100000,Reduced expenditure on water (VND/households),Reduced water expenditure
 percent_pollution_reduction_i1234,norm,0.001,0.15,Percentage of pollution reduction of advices (%),Percent pollution reduction
 new_income_farm_peryear_i12,norm,50000,2000000,New income from on-farm activities per year (VND/households/year),New income on-farm 
-rate_farm,posnorm,0.05,0.4,Percent of farmers who practice more on-farm (%),Percent farmers on-farm
+rate_farm,posnorm,0.05,0.4,Percent of farmers who practice more on-farm (%),Percent farmers doing more on-farm
 new_income_nonfarm_peryear_i12,norm,0,15000000,New income from non-farm activities per year (VND/households/year),New income non-farm
-rate_nonfarm,posnorm,0.02,0.15,Percent of farmers who practice more non-farm (%),Percent farmers do more non-farm
+rate_nonfarm,posnorm,0.02,0.15,Percent of farmers who practice more non-farm (%),Percent farmers doing more non-farm
 gender_coverage,posnorm,0.15,0.25,Coverage of gender activity in the community (%),Coverage of gender activity
 reduced_expenditure_health_i1234,unif,0,100000000,Reduced health expenditure (VND/household),Reduced household health expenditure
 methan_reduction_co2eq,norm,-0.5,1.75,Methane reduction (tonCO2eq/ha/year),Methane reduction 
