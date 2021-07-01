@@ -74,7 +74,7 @@ bcrxplotsave<-bcrxplot + scale_fill_discrete(name="",
   theme(plot.title = element_text(size = 14, face = "bold", hjust = 0.5))
 
 bcrx
-ggsave("bcrxplotsave.jpeg", dpi = 500, width = 7, height = 7) 
+#ggsave("bcrxplotsave.jpeg", dpi = 500, width = 7, height = 7) 
 
 
 #1.3 Plot for both npv and bcr####
