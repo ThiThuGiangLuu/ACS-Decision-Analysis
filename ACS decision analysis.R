@@ -1,6 +1,7 @@
   #install.packages("decisionSupport")
   library(decisionSupport)
-  #no comma in number in dataset
+  
+  # Internal function to run the model line by line
   
   make_variables<-function(est,n=1)
   {
@@ -12,11 +13,14 @@
   make_variables(estimate_read_csv("acis_inputs_EN.csv"))
   
   acis_costbenefit <- function(x, varnames){
+
     
+# The interventions include:
     # Intervention 1: Weather station-SMS-gender
     # Intervention 2: SMS-gender
     # Intervention 3: SMS-loudspeaker
     # Intervention 4: Paper-loudspeaker
+# Risks, costs and benefits include: 
     # i1: risk/cost/benefit variable incurred for intervention1
     # i2: risk/cost/benefit variable incurred for intervention2
     # i3: risk/cost/benefit variable incurred for intervention3
@@ -63,8 +67,8 @@
     # Buy forecast from provincial met station for the whole project period 
     # (Intervention1234)
     cost_forecast_province<-rep(0,n_years)
-    cost_forecast_province[1:5]<-(cost_weekly_forecasts_i1234+
-                                    cost_seasonal_forecasts_i1234)/exchange_rate
+    cost_forecast_province[1:5]<-vv(cost_weekly_forecasts_i1234+
+                                    cost_seasonal_forecasts_i1234, var_CV, n_years)/exchange_rate
   #2.2 Translation####
     
     # Translation from forecasts (training on translation) to advisory costs 
