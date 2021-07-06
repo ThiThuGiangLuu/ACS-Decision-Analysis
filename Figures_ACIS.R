@@ -80,7 +80,7 @@ bcrx
 #1.3 Plot for both npv and bcr####
 combinenpvbcrx<- plot_grid(npv,bcrxplotsave)
 
-ggsave("6.combinenpvbcrx.jpeg", dpi = 500, width = 9,
+ggsave("Fig5-Combine-npv-bcrx.jpeg", dpi = 500, width = 9,
        height = 5)
 
 # 2. PLOTING VIP and EVPI####
@@ -231,7 +231,7 @@ combinevip <- plot_grid(vip1plot, vip2plot, vip3plot, vip4plot,
                        scale=0.95,
                        hjust=-0.2, vjust = 1) 
 
-ggsave("7.combinevip.jpeg", dpi = 500, 
+ggsave("Fig6-Combine-vip.jpeg", dpi = 500, 
         width = 9,
         height = 8)
 
@@ -355,7 +355,7 @@ evpiplot4
           legend.margin = margin(6, 6, 6, 6))+
     theme(legend.title = element_blank())
   
-  ggsave("8.annualcostplot.jpeg", dpi=500, width = 5, height = 4)
+  ggsave("Fig7-Annual-cost.jpeg", dpi=500, width = 5, height = 4)
   
   
 
