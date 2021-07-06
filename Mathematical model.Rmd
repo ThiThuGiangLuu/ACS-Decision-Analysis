@@ -23,6 +23,20 @@ The input table `acis_inputs_EN.csv` contains the the variables used in the mode
 
 ## II. Implement model in R
 
+We first need to make variables
+
+```{r, warning = FALSE}
+make_variables<-function(est,n=1)
+  {
+  x<-random(rho=est,n=n)
+  for(i in colnames(x))
+    assign(i, as.numeric(x[1,i]),envir=.GlobalEnv)
+  }
+  
+  make_variables(estimate_read_csv("acis_inputs_EN.csv"))
+  
+```
+
 We then can code the mathematical model using variables. We call `acis_costbenefit` 
 as the function that uses to calculate the Net Present Values (NPV) of the investment decision in ACS. 
 
