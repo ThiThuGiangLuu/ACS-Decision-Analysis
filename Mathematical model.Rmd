@@ -1137,7 +1137,7 @@ return(list(
 ```
 
 ## III. Running the model 
-The input table, the model function `welfareFuction` are fed into the Monte Carlo Simulation function, `decisionSupport()` (Luedeling et al., 2020) package to run the decision analysis. We define the number of model runs as of 10,000 models. We specify the `outputPath` to store decision outcome in specified folder `MCResults`
+The input table, the model function `welfareFuction` are fed into the Monte Carlo Simulation function, `decisionSupport()` (Luedeling et al., 2021) package to run the decision analysis. We define the number of model runs as of 10,000 models. We specify the `outputPath` to store decision outcome in specified folder `MCResults`
 
 ```{r eval=FALSE}
   decisionSupport::decisionSupport(
@@ -1152,19 +1152,19 @@ The input table, the model function `welfareFuction` are fed into the Monte Carl
 ## IV. Outcome distribution visualization
 ### 1. Visualization of Net Present Values (NPV) and Benefit Cost Ratios (BCRs)
 
-We extracted NPV and BCR data from the file `MCResults\mcSimulationResults.csv` as outcomes of the `decisionSupport` function (Luedeling et al., 2020). We then visualize the probability distribution of NPVs and CBR using `ggplot2` package (Wickham et al., 2020). We combine the 2 graphs into a single graphs using `cowplot` package (Wilke, 2019).  
+We extracted NPV and BCR data from the file `MCResults\mcSimulationResults.csv` as outcomes of the `decisionSupport` function (Luedeling et al., 2021). We then visualize the probability distribution of NPVs and CBR using `ggplot2` package (Wickham et al., 2020). We combine the 2 graphs into a single graphs using `cowplot` package (Wilke, 2019).  
 ![](6.combinenpvbcrx.jpeg)
 Figure: Net Present Values and Benefit Cost Ratios of the four agro-climate interventions
 
 ### 2. Visualization of variable importance of Partial Least Squares regression model
 
-We extracted PLS results from the folder `MCResults` as outcomes of the `decisionSupport` function (Luedeling et al., 2020). We then visualize the VIP scores using `ggplot2` package (Wickham et al., 2020). We combine the 4 graphs into a single graphs using `cowplot` package (Wilke, 2019). 
+We extracted PLS results from the folder `MCResults` as outcomes of the `decisionSupport` function (Luedeling et al., 2021). We then visualize the VIP scores using `ggplot2` package (Wickham et al., 2020). We combine the 4 graphs into a single graphs using `cowplot` package (Wilke, 2019). 
 ![](7.combinevip.jpeg)
 Figure: Variable importance of a Partial Least Squares (PLS) regression model relating uncertain inputs to decision models for the four agro-climate interventions. 
 
 ### 3. Visualization of annual costs
 
-We extracted annual cost data from the file `MCResults\mcSimulationResults.csv` as outcomes of the `decisionSupport` function (Luedeling et al., 2020). We then visualize the probability distribution of annual costs using `ggplot2` package (Wickham et al., 2020).
+We extracted annual cost data from the file `MCResults\mcSimulationResults.csv` as outcomes of the `decisionSupport` function (Luedeling et al., 2021). We then visualize the probability distribution of annual costs using `ggplot2` package (Wickham et al., 2020).
 ![](8.annualcostplot.jpeg)
 Figure: Simulated annual costs (thousand USD) invested in four interventions over five years. 
 
@@ -1174,7 +1174,7 @@ We acknowledge the valuable support from CARE in Vietnam and the Centre of Commu
 
 ## V. References
 
-Luedeling, E., Goehring, L., Schiffers, K., 2020. DecisionSupport – Quantitative Support of Decision Making under Uncertainty. Contributed Package to the R Programming Language. Version 1.103.2 [WWW Document]. URL https://cran.r-project.org/web/packages/decisionSupport/index.html
+Luedeling, Eike, Lutz Goehring, Katja Schiffers, Cory Whitney, and Eduardo Fernandez. DecisionSupport – Quantitative Support of Decision Making under Uncertainty. Contributed Package to the R Programming Language. Version 1.106. R programming language, 2021. https://cran.r-project.org/web/packages/decisionSupport/index.html.
 
 R Core Team. 2019. R: A Language and Environment for Statistical Computing. Vienna, Austria: R
 Foundation for Statistical Computing. https://www.R-project.org/.
