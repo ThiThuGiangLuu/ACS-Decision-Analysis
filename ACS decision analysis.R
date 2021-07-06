@@ -30,8 +30,8 @@
     # i34: risk/cost/benefit for intervention3 and intervention 4
     # i1234: risk/cost/benefit for all intervention1, intervention2, intervention 3 and intervention 4
   
-  # RISKS THAT IMPACTS BENEFITS
-    # inaccurate forecast:  risk which is on-going every season/year
+# Risks that impact benefits
+    # inaccurate forecasts:  risk which is on-going every season/year
     # weather risks: risk which is on-going every season/year
     
     #1. Calculating uncertainties and risks####

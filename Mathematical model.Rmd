@@ -1,6 +1,9 @@
 ---
 title: "**Decision analysis of agro-climate service scaling** <br /> A case study in Dien Bien District, Vietnam"
 author: Thi Thu Giang Luu^a,@^, Cory Whitney^a,b^ and Eike Luedeling^a^ <br /><small>^a^INRES-Horticultural Sciences, University of Bonn, Auf dem Huegel 6, 53121 Bonn, Germany <br /><small/>^b^Center of Development Research (ZEF), University of Bonn, Genscherallee 3, 53113 Bonn, Germany <br /><small/>^@^Corresponding author's email:luuthithugiang@gmail.com
+bibliography: 
+  - bib/references.bib
+  - bib/packages.bib
 output: 
   html_document:
     toc: true
@@ -9,21 +12,47 @@ output:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+library(bayesplot)
 library(decisionSupport)
+library(DiagrammeR)
+library(ggplot2)
+library(ggrepel)
+library(ggridges)
+library(ggthemes)
+library(knitr)
+library(plyr)
+library(rmarkdown)
+library(tidyverse)
 options(knitr.table.format = "html")
 ```
 
-This document describes the mathematical model used for calculating the Net Present Values of the Agro-climate services (ACS) in Vietnam. The model is also available online at https://github.com/ThiThuGiangLuu/ACS-Decision-Analysis. 
+```{r, warning=FALSE, include = FALSE}
+#Automatically write R package citation entries to a .bib file
+knitr::write_bib(c(.packages(), 
+                   'bayesplot',
+                   'decisionSupport', 
+                   'DiagrammeR',
+                   'ggplot2',
+                   'ggrepel',
+                   'ggridges',
+                   'ggthemes',
+                   'knitr',
+                   'plyr',
+                   'rmarkdown',
+                   'tidyverse'), 'bib/packages.bib')
+```
+
+This document describes the model simulation used for forecasting the potential outcomes of four different Agro-climate services (ACS) interventions in Vietnam. The model is also available in the [ACS-Decision-Analysis repository](https://github.com/ThiThuGiangLuu/ACS-Decision-Analysis). 
 
 # Model development process
 
 ## I. Input table 
 
-The input table `acis_inputs_EN.csv` contains the the variables used in the model. The table includes the variable names, variable distribution, variable upper and lower bound estimates (90% confidence interval), variable descriptions and variable labels. 
+The input table `acis_inputs_EN.csv` contains the the variables used in the model. The table includes the variable names, variable distribution, variable upper and lower bound estimates (90% confidence interval), variable descriptions and variable labels. Download the table from the [ACS-Decision-Analysis repository](https://github.com/ThiThuGiangLuu/ACS-Decision-Analysis). 
 
 ## II. Implement model in R
 
-We first need to make variables
+To illustrate the model line by line we create a `make_variables` function with the `decisionSupport` `estimate_read_csv` to produce a single draw of the variable distributions defined in the `acis_inputs_EN.csv` input table. 
 
 ```{r, warning = FALSE}
 make_variables<-function(est,n=1)
@@ -37,20 +66,17 @@ make_variables<-function(est,n=1)
   
 ```
 
-We then can code the mathematical model using variables. We call `acis_costbenefit` 
-as the function that uses to calculate the Net Present Values (NPV) of the investment decision in ACS. 
+The full model that is described here can be found in the [ACS-Decision-Analysis repository](https://github.com/ThiThuGiangLuu/ACS-Decision-Analysis). The code described below is wrapped in a function called `acis_costbenefit` in the [ACS decision analysis.R file](https://github.com/ThiThuGiangLuu/ACS-Decision-Analysis/blob/master/ACS%20decision%20analysis.R). The function is used to calculate the Net Present Values (NPV) of the investment decision in ACS. 
 
-```{r eval=FALSE}
-acis_costbenefit <- function(x, varnames){
-  
-```
-
-We note the use of sign, term in our model 
+The interventions include:
 
     *Intervention 1: Weather station-SMS-gender
     *Intervention 2: SMS-gender
     *Intervention 3: SMS-loudspeaker
     *Intervention 4: Paper-loudspeaker
+    
+Risks, costs and benefits include: 
+
     *i1: risk/cost/benefit variable incurred for intervention1
     *i2: risk/cost/benefit variable incurred for intervention2
     *i3: risk/cost/benefit variable incurred for intervention3
@@ -62,216 +88,28 @@ We note the use of sign, term in our model
 
 ### 1. Calculating chance event of risks and uncertainties
 
-We used function `chance_event()` to simulate the risks of having extreme weather events, 
-chances of having inaccurate forecasts and the chances that cause additional
-agricultural input application due to weather events. This function will simulate the chance if an event may occur or not. As a result, the values of dependent variables may vary depending on the occurrence of the events. The output of the simulation can be single or series of values.
+We used the `chance_event()` function to simulate the risks of having extreme weather events, chances of having inaccurate forecasts and the chances that cause additional agricultural input application due to weather events. This function will simulate the chance if an event may occur or not. As a result, the values of dependent variables may vary depending on the occurrence of the events. The output of the simulation can be single or series of values. For example we calculated the drought risk for each year in intervention1, intervention2, intervention 3 and intervention 4 with the `chance_event` function, using `chance_drought_i1234` and `n_years` from the input table.
 
+```{r chance_event}
+drought_risk_i1234 <- chance_event(chance_drought_i1234, 
+                                   value_if = 1, 
+                                   n = n_years)
 
-```{r}
-# Drought risk for each year
-    drought_risk_i1234<-chance_event(chance_drought_i1234,value_if = 1, n=n_years)
-# Chance of having inaccurate drought forecast at the beginning of season intervention 1, 2, 3, 4
-    inaccurate_forecast_extreme_drought_i1234<-chance_event(chance_inaccurate_forecast_extreme_drought_i1234,
-                                                            value_if = 1, n=n_years)
-    
-# Extreme cold risk for each year
-    risk_extreme_cold<-chance_event(chance_extreme_cold,value_if = 1, n=n_years)
-# Chance of having inaccurate extreme cold forecast 
-    inaccurate_forecast_extreme_cold_i1234<-chance_event(chance_inaccurate_forecast_extreme_cold_i1234,
-                                                         value_if = 1, n=n_years)
-    
-# Chance of having inaccurate weekly weather forecast, intervention 1
-    inaccurate_forecast_i1<-chance_event(chance_inaccurate_forecast_i1,value_if = 1,n=n_years)
-# Chance of having inaccurate weekly weather forecast, intervention 2, 3, 4
-    inaccurate_forecast_i234<-chance_event(chance_inaccurate_forecast_i234,value_if = 1, n=n_years)
-    
-# Risk of having events can cause re-fertilize
-    risk_refertilize_i1234<-chance_event(chance_refertilize_i1234,value_if = 1, n=n_years)
-# Risk of re_sow due to extreme events (rain, cold) 
-    risk_resow_i1234<-chance_event(chance_resow_i1234,value_if = 1, n=n_years)
-  
+drought_risk_i1234
 ```
 
 ### 2. Calculating costs
 
-#### 2.1 Costs for forecast generation
-
+We used the `vv()` function to introduce variation into time series variables. Inputs to run this function include the mean of the variable to be varied `var_mean`, desired coefficient of variation (in percent) `var_CV` and number of values to be produced `n`. For example when calculating the costs of buying weather forecasts from provincial meteorological station for for each year in intervention1, intervention2, intervention 3 and intervention 4: 
 
 ```{r}
-# Set up new local met station for the whole project period (Intervention 1)
-    cost_new_met_station<-rep(0,n_years)
-    cost_new_met_station[1]<-(met_station_esta_i1+vv(met_station_main_i1, var_CV,1)+
-      cost_forecasts_access_i1)/exchange_rate
-    cost_new_met_station[2:5]<-vv(met_station_main_i1,var_CV,4)/exchange_rate
+    cost_forecast_province <- rep(0,n_years)
+    cost_forecast_province[1:5] <- vv(cost_weekly_forecasts_i1234 +
+                                    cost_seasonal_forecasts_i1234, 
+                                    var_CV, 
+                                    n_years)/exchange_rate
     
-# Buy forecast from provincial met station for the whole project period 
-# (Intervention1234)
-    cost_forecast_province<-rep(0,n_years)
-    cost_forecast_province[1:5]<-(cost_weekly_forecasts_i1234+
-                                    cost_seasonal_forecasts_i1234)/exchange_rate
-```
-
-We used function `vv()` to show the variation of time series variables. Inputs to run this function include the mean of the variable to be varied `var_mean`, desired coefficient of variation (in percent) `var_CV` and number of values to be produced `n`. 
-
-#### 2.2 Costs for translation from forecast into advice
-
-```{r}
-# Translation from forecasts (training on translation) to advisory costs 
-# for the whole project period (Intervention1234)
-   
-    cost_translation<-rep(0,n_years)
-    cost_translation[1:2]<-vv(cost_cb_translation_staff_i1234, var_CV,2)*
-      cb_translation_n12/exchange_rate
-    cost_translation[3:5]<-vv(cost_cb_translation_staff_i1234, var_CV,3)*
-      cb_translation_n345/exchange_rate
-```
-
-#### 2.3 Costs for transfer forecasts and advice to farmers
-Simulate the total farm households in 5 years
-
-
-```{r}
-# Calculating total households and farm households in 5 years
-    
-    time<-1:n_years
-    total_households_i1234<-vv(baseline_households_i1234, var_CV, n_years)*
-      exp(household_increase_rate*time)
-    
-    total_farm_households_i1234<-vv(baseline_farm_households_i1234, var_CV, n_years)*
-      exp(household_increase_rate*time)
-```
-
-Overall capacity building on communication and launching the services, for all interventions.
-
-```{r}
-# Transfer and communication costs: district and commune/village for 
-#the whole project period (Intervention1234)
-    cost_capacity_communication<-rep(0,n_years)
-    cost_capacity_communication[1]<-(vv(cost_cb_commune_i1234,var_CV,1)*n_communes+
-    vv(leftlet_year1_i1234,var_CV,1)*vv(total_farm_households_i1234,var_CV,1)+
-    vv(village_meeting_launch_i1234,var_CV,1)*n_village+
-      vv(video_i1234_peryear,var_CV,1)+
-      vv(cost_print_seasonal_bulletinA0_i1234,var_CV,1)*
-      (n_village*n_per_village+n_communes)*n_print_per_year)/exchange_rate
-    
-    cost_capacity_communication[2:5]<-(
-    vv(video_i1234_peryear,var_CV,4)+
-    vv(cost_print_seasonal_bulletinA0_i1234,var_CV,4)*
-    (n_village*n_per_village+n_communes)*n_print_per_year)/exchange_rate
-    ```
- 
- Cost for sending SMS to rice farmers for intervention 1 and intervention 2
- 
-
-```{r}
-# Cost for sending SMS to rice farmers for the whole project period (Intervention12)
-    cost_rice_SMS<- rep(0,n_years)
-    cost_rice_SMS[1:5]<-vv(cost_per_SMS_i123,var_CV,5)*
-      vv(messages_per_time_rice_i123, var_CV,5)*
-      vv(number_times_per_year_rice_i123,var_CV,5)*total_farm_households_i1234/
-      exchange_rate
-      
-     cost_animal_SMS<-rep(0,n_years)
-     cost_animal_SMS[1:5]<-vv(cost_per_SMS_i123,var_CV,5)*
-       vv(messages_per_time_animal_i123,var_CV,5)*
-      vv(number_times_per_year_animal_i123, var_CV,5)*
-       vv(percent_animal_households_i1234,var_CV,5)*
-        vv(total_farm_households_i1234, var_CV,5)/exchange_rate
-```
-
-Cost for sending SMS to village leaders (Intervention 3)
-
-```{r}
-# Cost for sending SMS to village leaders for the whole project period (Intervention3)
-     cost_SMS_villageleader<- rep(0,n_years)
-     cost_SMS_villageleader[1:5]<-vv(cost_per_SMS_i123,var_CV,5)*
-       vv(messages_per_time_rice_i123, var_CV,5)*
-       vv(number_times_per_year_rice_i123,var_CV,5)*commune_village_SMS_i3/
-       exchange_rate+
-       vv(cost_per_SMS_i123,var_CV,5)*
-       vv(messages_per_time_animal_i123,var_CV,5)*
-       vv(number_times_per_year_animal_i123, var_CV,5)*
-       commune_village_SMS_i3/exchange_rate 
-``` 
-    
-Allowance for village leaders for the whole project period (Intervention 3 and Intervention 4)
-    
-```{r}
-# Allowance for village leaders for the whole project period (Intervention34)
-     cost_allowance_village_leader<-rep(0,n_years)
-     cost_allowance_village_leader[1:5]<-n_village*
-       vv(allowance_village_leader_permonth_loud_i34,var_CV,5)*
-       months_per_year/exchange_rate
-``` 
-
-Cost for village leaders to collect bulletins (Intervention 4)
-
-```{r}
-# Cost for village leaders to collect bulletins (Intervention4)
-     cost_collect_bulletin<-rep(0,n_years)
-     cost_collect_bulletin[1:5]<-(allowance_bulletin_collect_time_short_i4*
-            vv(percent_short_distance_i4,var_CV,5)*
-              times_per_month*months_per_year*n_village)/exchange_rate+
-      (allowance_bulletin_collect_time_long_i4*
-         vv(1-percent_short_distance_i4,var_CV,5)*
-         times_per_month*months_per_year*n_village)/exchange_rate 
-``` 
-#### 2.4 Costs to support the use of advice and learning
-
-```{r}
-# Establish demonstration models (5000 m2/season,2 models of 1ha/year) 
-# Total fertilizer cost per ha (Intervention1234)
-     fa_adv_cost_perha <-(NPK5105_advice_i1234*NPK5105_price_i1234+N_advice_i1234*N_price_i1234+
-                            K_advice_i1234*K_price_i1234)/exchange_rate
-# Consider the partial support from the Government to develop demonstration model (5000m2~1/2ha)
-     cost_per_modeli1234<-((seed_advice_i1234*price_seed_i1234+
-      plant_protection_support_i1234)/exchange_rate+fa_adv_cost_perha*percent_fertilizer_model_supporti1234)/2
-      
-     cost_model<-rep(0,n_years)
-     cost_model[1:5]<-(model_training_i1234*n_training+no_model_compare_i1234*
-     cost_per_modeli1234+model_monitor_i1234+field_visit_i1234)/
-       exchange_rate
-```
-
-#### 2.5 Cross-cutting costs
-
-```{r}
-# Cost for gender intervention social action and analysis SAA (training, dialogue, commnity events)
-     # for the whole project period (Intervention1234)
-     cost_gender<-rep(0,n_years)
-     cost_gender[1]<-(SAA_TOT+dialogue_village*n_dialogues*n_village+
-                          cost_community_event*n_village)/exchange_rate 
-     cost_gender[2:5]<-0
-# Monitoring ####
-     # Monitoring and Evaluation for the whole project period (Intervention1234)
-     ME_cost<-rep(0,n_years)
-     ME_cost[0:2]<-0
-     ME_cost[3]<-(ME_district_i1234+ME_commune_i1234*n_communes)/exchange_rate
-     ME_cost[5]<-(ME_district_i1234+ME_commune_i1234*n_communes)/exchange_rate
-```
-
-#### Total costs for each intervention
-
-```{r}
-# Total cost for intervention 1####
-     total_cost_i1<-cost_new_met_station+cost_forecast_province+
-       cost_translation+cost_capacity_communication+cost_rice_SMS+
-       cost_animal_SMS+cost_model+cost_gender+ME_cost
-    
-# Total cost for intervention 2####
-     total_cost_i2<-cost_forecast_province+cost_translation+
-       cost_capacity_communication+cost_rice_SMS+cost_animal_SMS+
-       cost_model+cost_gender+ME_cost
-    
-# Total cost for intervention 3####
-     total_cost_i3<-cost_forecast_province+cost_translation+
-       cost_capacity_communication+cost_SMS_villageleader+
-       cost_allowance_village_leader+cost_model+ME_cost
-                                  
-# Total cost for intervention 4####
-     total_cost_i4<-cost_forecast_province+cost_translation+
-       cost_capacity_communication+cost_collect_bulletin+
-       cost_allowance_village_leader+cost_model+ME_cost
+    cost_forecast_province
 ```
 
 ### 3. Calculating benefits
@@ -1185,15 +1023,3 @@ Using the Grammar of Graphics. https://CRAN.R-project.org/package=ggplot2.
 
 Wilke, Claus O. 2019. Cowplot: Streamlined Plot Theme and Plot Annotations for ’Ggplot2’. https:
 //CRAN.R-project.org/package=cowplot.
-
-
-
-
-
-
-
-
-
-
-
-
