@@ -1,7 +1,6 @@
 ---
 title: "**Decision analysis of agro-climate service scaling** <br /> A case study in Dien Bien District, Vietnam"
 author: Thi Thu Giang Luu^a,@^, Cory Whitney^a,b^ and Eike Luedeling^a^ <br /><small>^a^INRES-Horticultural Sciences, University of Bonn, Auf dem Huegel 6, 53121 Bonn, Germany <br /><small/>^b^Center of Development Research (ZEF), University of Bonn, Genscherallee 3, 53113 Bonn, Germany <br /><small/>^@^Corresponding author's email:luuthithugiang@gmail.com
-date: "2021-07-02"
 output: 
   html_document:
     toc: true
@@ -23,20 +22,6 @@ This document describes the mathematical model used for calculating the Net Pres
 The input table `acis_inputs_EN.csv` contains the the variables used in the model. The table includes the variable names, variable distribution, variable upper and lower bound estimates (90% confidence interval), variable descriptions and variable labels. 
 
 ## II. Implement model in R
-
-We first need to make variables
-
-```{r, warning = FALSE}
-make_variables<-function(est,n=1)
-  {
-  x<-random(rho=est,n=n)
-  for(i in colnames(x))
-    assign(i, as.numeric(x[1,i]),envir=.GlobalEnv)
-  }
-  
-  make_variables(estimate_read_csv("acis_inputs_EN.csv"))
-  
-```
 
 We then can code the mathematical model using variables. We call `acis_costbenefit` 
 as the function that uses to calculate the Net Present Values (NPV) of the investment decision in ACS. 
