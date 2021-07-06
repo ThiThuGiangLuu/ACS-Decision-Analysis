@@ -78,7 +78,7 @@ dis_adoption_i123,norm,0.005,0.05,Annual disadoption rate intervention 123,Annua
 dis_adoption_i4,norm,0.05,0.3,Annual disadoption rate intervention 4,Annual disadoption rate i4
 effective_rate,posnorm,0.4,0.65,Percentage of farmers applying advice effectively among the adopted ones (%),Rate of farmers applying advice effectively
 chance_resow_i1234,tnorm_0_1,0.35,0.65,Chance to resow due to climate risks (%),Chance resow 
-chance_resow_advice_i1234,norm,0.7,0.9,Percent of risks (natural and human made) that is possible to be addressed by advice (%),Percent of risks addressed
+chance_resow_advice_i1234,norm,0.7,0.9,Percent of risks that is possible to be addressed by advice (%),Percent of risks addressed
 resow_fer_area_percentage_i1234,norm,0.2,0.4,Average percentage of area affected (resow or refertilize) when having risk (%),Percentage affected by risk
 labor_seed_fertilize_i1234,norm,500000,800000,Cost for labor to resow or refertilize per ha (VND/ha),Labor to resow or refertilize
 NPK5105_baseline_i1234,posnorm,500,650,Dose of NPK5105 baseline used by farmers per ha (kg/ha),Baseline NPK5105 per ha
@@ -94,7 +94,7 @@ K_applied_i1234,posnorm,50,140,"Dose of kali applied per ha (kg/ha) after having
 K_advice_i1234,const,140,140,Kali advised (140kg/ha),Kali advised per ha
 K_price_i1234,posnorm,11000,14000,Price of kali per kg (VND),Price potassium
 rice_area_loss_severe_risks_i1234,posnorm,0.02,0.2,"Percentage of annual destroyed cultivating land due to severe risks, typically flash flood, hailstone (%)",Rice area lost by severe risks
-chance_refertilize_i1234,tnorm_0_1,0.17,0.4,Chance of refertilize due to risks (climate and human made) (%),Chance refertilize
+chance_refertilize_i1234,tnorm_0_1,0.17,0.4,Chance of refertilize due to risks (%),Chance refertilize
 chance_refertilize_advice_i1234,tnorm_0_1,0.7,0.9,Percent of risks that is possible to be addressed by advice (%),Percent refertilize risks addressed
 rate_fer_pla_inno_i1,posnorm,0.2,0.3,Rate early fertilizer and pesticide adopter intervention 1 (%),"Rate early fertilizer, pesticide adopter i1"
 rate_fer_pla_immi_i1,posnorm,0.25,0.35,Rate of farmer who adopt advice on fertilizer and pesticide as impact of interpersonal exchange from previous adopter intervention 1 (%),"Rate fertilizer, pesticide adopter via exchange i1"
