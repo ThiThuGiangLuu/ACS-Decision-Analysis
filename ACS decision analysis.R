@@ -1,10 +1,11 @@
   #install.packages("decisionSupport")
   library(decisionSupport)
-  #no comma in number in dataset
   
-  make_variables<-function(est,n=1)
+  # Internal function to run the model line by line
+  
+  make_variables<-function(est, n = 1)
   {
-  x<-random(rho=est,n=n)
+  x<-random(rho = est, n = n)
   for(i in colnames(x))
     assign(i, as.numeric(x[1,i]),envir=.GlobalEnv)
   }
@@ -12,11 +13,15 @@
   make_variables(estimate_read_csv("acis_inputs_EN.csv"))
   
   acis_costbenefit <- function(x, varnames){
+
     
+# The interventions include:
     # Intervention 1: Weather station-SMS-gender
     # Intervention 2: SMS-gender
     # Intervention 3: SMS-loudspeaker
     # Intervention 4: Paper-loudspeaker
+    
+# Risks, costs and benefits include: 
     # i1: risk/cost/benefit variable incurred for intervention1
     # i2: risk/cost/benefit variable incurred for intervention2
     # i3: risk/cost/benefit variable incurred for intervention3
@@ -26,65 +31,103 @@
     # i34: risk/cost/benefit for intervention3 and intervention 4
     # i1234: risk/cost/benefit for all intervention1, intervention2, intervention 3 and intervention 4
   
-  # RISKS THAT IMPACTS BENEFITS
-    # inaccurate forecast:  risk which is on-going every season/year
+# Risks that impact benefits
+    # inaccurate forecasts:  risk which is on-going every season/year
     # weather risks: risk which is on-going every season/year
     
     #1. Calculating uncertainties and risks####
+    
     # Drought risk for each year
-    drought_risk_i1234<-chance_event(chance_drought_i1234,value_if = 1, n=n_years)
+    drought_risk_i1234 <- chance_event(chance_drought_i1234,
+                                     value_if = 1, 
+                                     n = n_years)
+    
     # Chance of having inaccurate drought forecast at the beginning of season intervention 1, 2, 3, 4
-    inaccurate_forecast_extreme_drought_i1234<-chance_event(chance_inaccurate_forecast_extreme_drought_i1234,value_if = 1, n=n_years)
+    inaccurate_forecast_extreme_drought_i1234 <- chance_event(chance_inaccurate_forecast_extreme_drought_i1234,
+                                                            value_if = 1, 
+                                                            n = n_years)
     
     # Extreme cold risk for each year
-    risk_extreme_cold<-chance_event(chance_extreme_cold,value_if = 1, n=n_years)
+    risk_extreme_cold <- chance_event(chance_extreme_cold,
+                                    value_if = 1, 
+                                    n = n_years)
+    
     # Chance of having inaccurate extreme cold forecast 
-    inaccurate_forecast_extreme_cold_i1234<-chance_event(chance_inaccurate_forecast_extreme_cold_i1234,value_if = 1, n=n_years)
+    inaccurate_forecast_extreme_cold_i1234 <- chance_event(chance_inaccurate_forecast_extreme_cold_i1234,
+                                                         value_if = 1, 
+                                                         n = n_years)
     
     # Chance of having inaccurate weekly weather forecast, intervention 1
-    inaccurate_forecast_i1<-chance_event(chance_inaccurate_forecast_i1,value_if = 1,n=n_years)
+    inaccurate_forecast_i1 <- chance_event(chance_inaccurate_forecast_i1,
+                                         value_if = 1,
+                                         n = n_years)
+    
     # Chance of having inaccurate weekly weather forecast, intervention 2, 3, 4
-    inaccurate_forecast_i234<-chance_event(chance_inaccurate_forecast_i234,value_if = 1, n=n_years)
+    inaccurate_forecast_i234 <- chance_event(chance_inaccurate_forecast_i234,
+                                           value_if = 1, 
+                                           n = n_years)
     
     # Risk of having events can cause re-fertilize
-    risk_refertilize_i1234<-chance_event(chance_refertilize_i1234,value_if = 1, n=n_years)
+    risk_refertilize_i1234 <- chance_event(chance_refertilize_i1234,
+                                         value_if = 1, 
+                                         n = n_years)
+    
     # Risk of re_sow due to extreme events (rain, cold) 
-    risk_resow_i1234<-chance_event(chance_resow_i1234,value_if = 1, n=n_years)
+    risk_resow_i1234<-chance_event(chance_resow_i1234,
+                                   value_if = 1, 
+                                   n = n_years)
     
   # 2. Calculating costs####
     
   # 2.1 Forecast generation####
-    # Set up new local met station for the whole project period (Intervention 1)
-    cost_new_met_station<-rep(0,n_years)
-    cost_new_met_station[1]<-(met_station_esta_i1+vv(met_station_main_i1, var_CV,1)+
-      cost_forecasts_access_i1)/exchange_rate
-    cost_new_met_station[2:5]<-vv(met_station_main_i1,var_CV,4)/exchange_rate
+    # Set up new local meteorological station for the whole project period (Intervention 1)
+    cost_new_met_station <- rep(0, n_years)
     
-    # Buy forecast from provincial met station for the whole project period 
+    cost_new_met_station[1] <- (met_station_esta_i1 + 
+                                  vv(met_station_main_i1, 
+                                     var_CV, 1) + 
+                                  cost_forecasts_access_i1)/exchange_rate
+    
+    cost_new_met_station[2:5] <- vv(met_station_main_i1,
+                                    var_CV, 4)/exchange_rate
+    
+    # Buy forecast from provincial meteorological station for the whole project period 
     # (Intervention1234)
-    cost_forecast_province<-rep(0,n_years)
-    cost_forecast_province[1:5]<-(cost_weekly_forecasts_i1234+
-                                    cost_seasonal_forecasts_i1234)/exchange_rate
+    cost_forecast_province <- rep(0, n_years)
+    
+    cost_forecast_province[1:5] <- vv(cost_weekly_forecasts_i1234 +
+                                    cost_seasonal_forecasts_i1234, 
+                                    var_CV, n_years)/exchange_rate
   #2.2 Translation####
     
     # Translation from forecasts (training on translation) to advisory costs 
     #for the whole project period (Intervention1234)
-   
-    cost_translation<-rep(0,n_years)
-    cost_translation[1:2]<-vv(cost_cb_translation_staff_i1234, var_CV,2)*
-      cb_translation_n12/exchange_rate
-    cost_translation[3:5]<-vv(cost_cb_translation_staff_i1234, var_CV,3)*
-      cb_translation_n345/exchange_rate
+    cost_translation <- rep(0, n_years)
+    
+    cost_translation[1:2] <- vv(cost_cb_translation_staff_i1234, 
+                                var_CV,2)*cb_translation_n12/exchange_rate
+    
+    cost_translation[3:5] <- vv(cost_cb_translation_staff_i1234, 
+                                var_CV,3)*cb_translation_n345/exchange_rate
   #2.3 Transfer####
     # Calculating total households and farm households in 5 years
     # https://socratic.org/questions/how-do-you-calculate-population-growth
-    time<-1:n_years
-    total_households_i1234<-vv(baseline_households_i1234, var_CV, n_years)*
-      exp(household_increase_rate*time)
+    time <- 1:n_years
     
-    total_farm_households_i1234<-vv(baseline_farm_households_i1234, var_CV, n_years)*
-      exp(household_increase_rate*time)
+    total_households_i1234 <- vv(baseline_households_i1234, 
+                                 var_CV, n_years)*exp(household_increase_rate*time)
     
+    total_farm_households_i1234 <- vv(baseline_farm_households_i1234, var_CV, n_years)*
+      exp(household_increase_rate*time)
+# CW Note ########################
+# CW Note ########################
+# CW Note ######################## CW Note I stopped here 
+# CW Note ######################## We can talk about the changes and see how to move forward
+######################## Looks really good
+######################## 
+######################## 
+########################     
+########################     
     # Transfer and communication costs: district and commune/village for 
     #the whole project period (Intervention1234)
     cost_capacity_communication<-rep(0,n_years)
@@ -197,7 +240,7 @@
     #3.1.1.1 Advisories to cope with extreme drought####
     
     # Drought risk for each year
-     drought_risk_i1234<-chance_event(chance_drought_i1234,value_if = 1, n=n_years)
+     drought_risk_i1234<-chance_event(chance_drought_i1234,value_if = 1, n = n_years)
     
     # Drought area for each year 
      rice_drought_i1234<-rep(0,n_years)
@@ -276,7 +319,7 @@
       
       # Benefits from reduced times of re-sowing####
       # Refer to risk of re_sow due to extreme events (rain, cold) if business as usual 
-      # risk_resow_i1234<-chance_event(chance_resow_i1234,value_if = 1, n=n_years)
+      # risk_resow_i1234<-chance_event(chance_resow_i1234,value_if = 1, n = n_years)
       # taking into consideration of the chance to reduce the risk
        resow_reduced_i1234<-risk_resow_i1234*chance_resow_advice_i1234
        
@@ -286,7 +329,7 @@
        reduce_resow_costsperha_i1234<-(seed_baseline_i1234)*
                                         vv(price_seed_i1234, var_CV, 5)
        
-       inaccurate_forecast_i1<-chance_event(chance_inaccurate_forecast_i1,value_if = 1,n=n_years)
+       inaccurate_forecast_i1<-chance_event(chance_inaccurate_forecast_i1,value_if = 1,n = n_years)
        benefit_time_seed_i1<-rep(0,n_years)
        benefit_time_seed_i1[1:5]<-resow_reduced_i1234*rice_area_effect*
                 (reduce_resow_costsperha_i1234+labor_seed_fertilize_i1234)*
@@ -294,7 +337,7 @@
          seed_rate_i1*effective_rate/exchange_rate
            
       # Benefit for time reduction in sowing for intervention 2 
-       inaccurate_forecast_i234<-chance_event(chance_inaccurate_forecast_i234,value_if = 1, n=n_years)
+       inaccurate_forecast_i234<-chance_event(chance_inaccurate_forecast_i234,value_if = 1, n = n_years)
        benefit_time_seed_i2<-rep(0,n_years)
        benefit_time_seed_i2[1:5]<-resow_reduced_i1234*rice_area_effect*
          (reduce_resow_costsperha_i1234+labor_seed_fertilize_i1234)*
@@ -367,7 +410,7 @@
              
     # Benefit for fertilizing times reduction#### 
     # Refer to risk of having events can cause re-fertilize
-    # risk_refertilize_i1234<-chance_event(chance_refertilize_i1234,value_if = 1, n=n_years)
+    # risk_refertilize_i1234<-chance_event(chance_refertilize_i1234,value_if = 1, n = n_years)
     # taking into consideration of the chance to reduce the risk 
        refertilize_reduced_i1234<-risk_refertilize_i1234*chance_refertilize_advice_i1234
        
@@ -481,9 +524,9 @@
     # to put all fertilizer back
     # Total benefit for rice intervention 1
     #Refer to risks
-    #inaccurate_forecast_i1<-chance_event(chance_inaccurate_forecast_i1,value_if = 1,n=n_years)
-    #inaccurate_forecast_i234<-chance_event(chance_inaccurate_forecast_i234,value_if = 1, n=n_years)
-    #inaccurate_forecast_extreme_drought_i1234<-chance_event(chance_inaccurate_forecast_extreme_drought_i1234,value_if = 1, n=n_years)
+    #inaccurate_forecast_i1<-chance_event(chance_inaccurate_forecast_i1,value_if = 1,n = n_years)
+    #inaccurate_forecast_i234<-chance_event(chance_inaccurate_forecast_i234,value_if = 1, n = n_years)
+    #inaccurate_forecast_extreme_drought_i1234<-chance_event(chance_inaccurate_forecast_extreme_drought_i1234,value_if = 1, n = n_years)
     
     total_rice_i1<-(1-inaccurate_forecast_extreme_drought_i1234)*reduced_drought_losses-
           (inaccurate_forecast_extreme_drought_i1234*rice_profit_no_drought*rice_drought_i1234/exchange_rate)+
@@ -527,7 +570,7 @@
     # 3.1.2.1 Buffalo benefits#### 
     # risk of extreme cold that can affect buffaloes and cows. Advice can be provided
     # in any extreme cold events
-    risk_extreme_cold<-chance_event(chance_extreme_cold,value_if = 1, n=n_years)
+    risk_extreme_cold<-chance_event(chance_extreme_cold,value_if = 1, n = n_years)
     
     # Adoption rate for animal husbandry advice
     
@@ -537,7 +580,7 @@
                                  rate_saturated_i12)
       
     # Inaccurate forecast are same for all interventions
-    inaccurate_forecast_extreme_cold_i1234<-chance_event(chance_inaccurate_forecast_extreme_cold_i1234,value_if = 1, n=n_years)
+    inaccurate_forecast_extreme_cold_i1234<-chance_event(chance_inaccurate_forecast_extreme_cold_i1234,value_if = 1, n = n_years)
     
     # Benefit for buffalo intervention 1
     buffalo_benefiti1<-rep(0, n_years)
@@ -847,13 +890,14 @@
     # Annual cash flow intervention 4
     cash_flowi4<-discount(bottomline_benefiti4, discount_rate, calculate_NPV = FALSE)
     cum_cash_flowi4<-cumsum(cash_flowi4)
-    # NPV Intervention 4####
+    # NPV Intervention 4 ####
     NPV4<-discount(bottomline_benefiti4, discount_rate, calculate_NPV = TRUE)
     
-    # Benefit-cost ratio intervention 4####
+    # Benefit-cost ratio intervention 4 ####
     discount_total_benefit_i4<-discount(total_benefiti4,discount_rate, calculate_NPV = TRUE)
     discount_total_cost_i4<-discount(total_cost_i4, discount_rate, calculate_NPV = TRUE)
     bcri4<-discount_total_benefit_i4/discount_total_cost_i4
+    
     #Compare option 3 and option 1 and 2
     option3_option1<-NPV3-NPV1
     option3_option2<-NPV3-NPV2
@@ -884,17 +928,6 @@
   numberOfModelRuns = 1e4, #run 10,000 times
   functionSyntax = "plainNames")
   
-  # Another option to run the model with handy results (not many folders but only 
-  #the input and output variable simulations)
-  #https://cran.r-project.org/web/packages/decisionSupport/vignettes/example_decision_function.html
-  #mcSimulation_results <- decisionSupport::mcSimulation(
-    #estimate = decisionSupport::estimate_read_csv("acis_inputs_EN.csv"),
-    #model_function = acis_costbenefit,
-    #numberOfModelRuns = 1e4, #run 1,000 times
-    #functionSyntax = "plainNames")
-  
-  #write.csv(mcSimulation_results$x, file="x.csv")
-  #write.csv(mcSimulation_results$y, file="y.csv")
  
   
  
