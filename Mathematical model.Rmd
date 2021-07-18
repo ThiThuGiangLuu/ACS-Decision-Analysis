@@ -56,36 +56,25 @@ make_variables <- function(est, n = 1)
 
 The code described below is wrapped in a function called `acis_costbenefit` in the [ACS decision analysis.R file](https://github.com/ThiThuGiangLuu/ACS-Decision-Analysis/blob/master/ACS%20decision%20analysis.R). The function is used to calculate the Net Present Values (NPV) of the investment decision in ACS. 
 
-## Four ACS Interventions 
+*Four ACS Interventions* 
 
 The four Agro-climatic Services (ACS) interventions considered in the model include:
 
-<<<<<<< HEAD
-```{r}
-# This benefit is similar to all interventions 
-# Drought risk for each year
-# drought_risk_i1234<-chance_event(chance_drought_i1234,value_if = 1, n=n_years)
-    
-# Drought area for each year 
-     rice_drought_i1234<-rep(0,n_years)
-     rice_drought_i1234[1:5]<-rice_area_drought_i1234*drought_risk_i1234
-=======
 - Intervention 1: Weather station-SMS-gender
 - Intervention 2: SMS-gender
 - Intervention 3: SMS-loudspeaker
 - Intervention 4: Paper-loudspeaker
->>>>>>> 65fd36684c6924b39017a7eec5bb6ec507652d0c
     
 The risks, costs and benefits of the four internetions include: 
 
-- i1: risk/cost/benefit variable incurred for intervention1
-- i2: risk/cost/benefit variable incurred for intervention2
-- i3: risk/cost/benefit variable incurred for intervention3
-- i4: risk/cost/benefit variable incurred for intervention4
-- i12: risk/cost/benefit variable incurred for intervention1 and intervention 2
-- i234: risk/cost/benefit for intervention2, intervention3 and intervention 4
-- i34: risk/cost/benefit for intervention3 and intervention 4
-- i1234: risk/cost/benefit for all intervention1, intervention2, intervention 3 and intervention 4
+- i1: risk/cost/benefit variable incurred for intervention 1
+- i2: risk/cost/benefit variable incurred for intervention 2
+- i3: risk/cost/benefit variable incurred for intervention 3
+- i4: risk/cost/benefit variable incurred for intervention 4
+- i12: risk/cost/benefit variable incurred for intervention 1 and intervention 2
+- i234: risk/cost/benefit for intervention 2, intervention 3 and intervention 4
+- i34: risk/cost/benefit for intervention 3 and intervention 4
+- i1234: risk/cost/benefit for all intervention 1, intervention 2, intervention 3 and intervention 4
 
 ### 1. Calculating chance event of risks and uncertainties
 
@@ -99,25 +88,45 @@ drought_risk_i1234 <- chance_event(chance_drought_i1234,
 drought_risk_i1234
 ```
 
-We used the `vv()` function to introduce variation into time series variables. Inputs to run this function include the mean of the variable to be varied `var_mean`, desired coefficient of variation (in percent) `var_CV` and number of values to be produced `n`. For example when calculating the costs of buying weather forecasts from provincial meteorological station for for each year in intervention1, intervention2, intervention 3 and intervention 4: 
+We used the `vv()` function to introduce variation into time series variables. Inputs to run this function include the mean of the variable to be varied `var_mean`, desired coefficient of variation (in percent) `var_CV` and number of values to be produced `n`. 
+
+### 2. Example: Cost calculation
+
+We use `cost_weekly_forecasts_i1234` and `cost_seasonal_forecasts_i1234` from input tables to calculate the costs of buying weather forecasts from provincial meteorological station for for each year in intervention 1, intervention 2, intervention 3 and intervention 4: 
 
 ```{r}
-    cost_forecast_province <- rep(0, n_years)
-    cost_forecast_province[1:5] <- vv(cost_weekly_forecasts_i1234 +
+cost_forecast_province <- rep(0, n_years)
+cost_forecast_province[1:5] <- vv(cost_weekly_forecasts_i1234 +
                                     cost_seasonal_forecasts_i1234, 
                                     var_CV, 
                                     n_years)/exchange_rate
     
-    cost_forecast_province
+cost_forecast_province
 ```
 
-We considered economic benefits such as potential benefits for rice plantation from drought advice at the start of the season. For example we use the `rice_area_drought_i1234` from the input table and `drought_risk_i1234` calculated above to create a drought area we called `rice_area_drought_i1234` for each year in intervention1, intervention2, intervention 3 and intervention 4. 
+### 3. Example: Benefit calculation
+We considered economic benefits such as potential benefits for rice plantation from drought advice at the start of the season. For example we use the `rice_area_drought_i1234` from the input table and `drought_risk_i1234` calculated above to create a drought area we called `rice_area_drought_i1234` for each year in intervention 1, intervention 2, intervention 3 and intervention 4. 
 
 ```{r}
-     rice_drought_i1234 <- rep(0, n_years)
-     rice_drought_i1234[1:5] <- rice_area_drought_i1234*drought_risk_i1234
+# Drought area for each year
+rice_drought_i1234 <- rep(0, n_years)
+rice_drought_i1234[1:5] <- rice_area_drought_i1234*drought_risk_i1234
 ```
 
+Then, we use `rice_drought_i1234` calculated above and the losses reduced per ha `reduce_loss_drought_i1234` to calculate benefit from drought advice for intervention 1, intervention 2, intervention 3 and intervention 4.
+
+```{r}
+# Avoid losses due to drought for the whole project period
+reduced_drought_losses<-rep(0, n_years)
+reduced_drought_losses[1:5]<-vv(reduce_loss_drought_i1234,var_CV, 5)*
+              vv(rice_drought_i1234,var_CV_high, 5)/exchange_rate
+```
+
+### 4. Calculating Net Present Value 
+
+We calculate Net Present Values (NPV) and Benefit Cost Ratios (BCR) of the four ACS investment options from the values of total benefits, costs and `discount_rate`. 
+
+### 5. Simulate and analyze data
 We used the input table and the model to run a Monte Carlo Simulation with the `decisionSupport` function in the `decisionSupport` package [@R-decisionSupport]. We define the number of model runs as of 10,000 models. We specify the `outputPath` to store decision outcome in specified folder `MCResults`.
 
 ```{r eval=FALSE}
@@ -139,5 +148,10 @@ We extracted Net Present Values (NPV) and Benefit Cost Ratios (BCRs) from the fi
 We acknowledge the valuable support from CARE in Vietnam and the Centre of Community Development (CCD). We thank the Schlumberger Foundation for providing a scholarship for the main author. We value the participation and support from expert team through out this study.  
 
 ## References
+
+## Annex with full R code of the model
+
+```{r, warning=FALSE, code=xfun::read_utf8('ACS decision analysis.R')}
+```
 
 
