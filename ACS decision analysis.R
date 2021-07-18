@@ -197,7 +197,7 @@
     #3.1.1.1 Advisories to cope with extreme drought####
     
     # Drought risk for each year
-     drought_risk_i1234<-chance_event(chance_drought_i1234,value_if = 1, n=n_years)
+    # drought_risk_i1234<-chance_event(chance_drought_i1234,value_if = 1, n=n_years)
     
     # Drought area for each year 
      rice_drought_i1234<-rep(0,n_years)
