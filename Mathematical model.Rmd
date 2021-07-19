@@ -109,8 +109,9 @@ We considered economic benefits such as potential benefits for rice plantation f
 
 ```{r}
 # Drought area for each year
-rice_drought_i1234 <- rep(0, n_years)
-rice_drought_i1234[1:5] <- rice_area_drought_i1234*drought_risk_i1234
+rice_drought_i1234<-rep(0,n_years)
+rice_drought_i1234[1:5]<-vv(rice_area_drought_i1234, var_CV, 5)*
+              drought_risk_i1234
 ```
 
 Then, we use `rice_drought_i1234` calculated above and the losses reduced per ha `reduce_loss_drought_i1234` to calculate benefit from drought advice for intervention 1, intervention 2, intervention 3 and intervention 4.

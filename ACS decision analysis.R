@@ -252,7 +252,7 @@ acis_costbenefit <- function(x, varnames){
     
   # Drought area for each year 
   rice_drought_i1234<-rep(0,n_years)
-  rice_drought_i1234[1:5]<-rice_area_drought_i1234*
+  rice_drought_i1234[1:5]<-vv(rice_area_drought_i1234, var_CV, 5)*
               drought_risk_i1234
     
   # Rice area (total area of two seasons a year) that are not affected by drought 

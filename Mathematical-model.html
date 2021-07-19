@@ -257,7 +257,7 @@ summary {
                                    n = n_years)
 
 drought_risk_i1234</code></pre>
-<pre><code>## [1] 0 1 0 1 1</code></pre>
+<pre><code>## [1] 0 0 0 1 1</code></pre>
 <p>We used the <code>vv()</code> function to introduce variation into time series variables. Inputs to run this function include the mean of the variable to be varied <code>var_mean</code>, desired coefficient of variation (in percent) <code>var_CV</code> and number of values to be produced <code>n</code>.</p>
 </div>
 <div id="example-cost-calculation" class="section level3">
@@ -270,14 +270,15 @@ cost_forecast_province[1:5] &lt;- vv(cost_weekly_forecasts_i1234 +
                                     n_years)/exchange_rate
     
 cost_forecast_province</code></pre>
-<pre><code>## [1] 2334.758 2211.392 2042.226 2341.260 2338.137</code></pre>
+<pre><code>## [1] 2193.976 2169.757 2237.691 2222.713 2293.736</code></pre>
 </div>
 <div id="example-benefit-calculation" class="section level3">
 <h3>3. Example: Benefit calculation</h3>
 <p>We considered economic benefits such as potential benefits for rice plantation from drought advice at the start of the season. For example we use the <code>rice_area_drought_i1234</code> from the input table and <code>drought_risk_i1234</code> calculated above to create a drought area we called <code>rice_area_drought_i1234</code> for each year in intervention 1, intervention 2, intervention 3 and intervention 4.</p>
 <pre class="r"><code># Drought area for each year
-rice_drought_i1234 &lt;- rep(0, n_years)
-rice_drought_i1234[1:5] &lt;- rice_area_drought_i1234*drought_risk_i1234</code></pre>
+rice_drought_i1234&lt;-rep(0,n_years)
+rice_drought_i1234[1:5]&lt;-vv(rice_area_drought_i1234, var_CV, 5)*
+              drought_risk_i1234</code></pre>
 <p>Then, we use <code>rice_drought_i1234</code> calculated above and the losses reduced per ha <code>reduce_loss_drought_i1234</code> to calculate benefit from drought advice for intervention 1, intervention 2, intervention 3 and intervention 4.</p>
 <pre class="r"><code># Avoid losses due to drought for the whole project period
 reduced_drought_losses&lt;-rep(0, n_years)
@@ -566,7 +567,7 @@ acis_costbenefit &lt;- function(x, varnames){
     
   # Drought area for each year 
   rice_drought_i1234&lt;-rep(0,n_years)
-  rice_drought_i1234[1:5]&lt;-rice_area_drought_i1234*
+  rice_drought_i1234[1:5]&lt;-vv(rice_area_drought_i1234, var_CV, 5)*
               drought_risk_i1234
     
   # Rice area (total area of two seasons a year) that are not affected by drought 
