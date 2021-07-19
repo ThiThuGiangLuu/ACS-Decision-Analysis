@@ -22,14 +22,14 @@ acis_costbenefit <- function(x, varnames){
   # Intervention 4: Paper-loudspeaker
   
   # Risks, costs and benefits include: 
-  # i1: risk/cost/benefit variable incurred for intervention1
-  # i2: risk/cost/benefit variable incurred for intervention2
-  # i3: risk/cost/benefit variable incurred for intervention3
-  # i4: risk/cost/benefit variable incurred for intervention4
-  # i12: risk/cost/benefit variable incurred for intervention1 and intervention 2
-  # i234: risk/cost/benefit for intervention2, intervention3 and intervention 4
-  # i34: risk/cost/benefit for intervention3 and intervention 4
-  # i1234: risk/cost/benefit for all intervention1, intervention2, intervention 3 and intervention 4
+  # i1: risk/cost/benefit variable incurred for intervention 1
+  # i2: risk/cost/benefit variable incurred for intervention 2
+  # i3: risk/cost/benefit variable incurred for intervention 3
+  # i4: risk/cost/benefit variable incurred for intervention 4
+  # i12: risk/cost/benefit variable incurred for intervention 1 and intervention 2
+  # i234: risk/cost/benefit for intervention 2, intervention3 and intervention 4
+  # i34: risk/cost/benefit for intervention 3 and intervention 4
+  # i1234: risk/cost/benefit for all intervention 1, intervention 2, intervention 3 and intervention 4
   
   # Risks that impact benefits
   # inaccurate forecasts:  risk which is on-going every season/year
@@ -39,43 +39,43 @@ acis_costbenefit <- function(x, varnames){
   
   # Drought risk for each year
   drought_risk_i1234 <- chance_event(chance_drought_i1234,
-                                     value_if = 1, 
-                                     n = n_years)
+            value_if = 1, 
+            n = n_years)
   
   # Chance of having inaccurate drought forecast at the beginning of season intervention 1, 2, 3, 4
   inaccurate_forecast_extreme_drought_i1234 <- chance_event(chance_inaccurate_forecast_extreme_drought_i1234,
-                                                            value_if = 1, 
-                                                            n = n_years)
+            value_if = 1, 
+            n = n_years)
   
   # Extreme cold risk for each year
   risk_extreme_cold <- chance_event(chance_extreme_cold,
-                                    value_if = 1, 
-                                    n = n_years)
+            value_if = 1, 
+            n = n_years)
   
   # Chance of having inaccurate extreme cold forecast 
   inaccurate_forecast_extreme_cold_i1234 <- chance_event(chance_inaccurate_forecast_extreme_cold_i1234,
-                                                         value_if = 1, 
-                                                         n = n_years)
+            value_if = 1, 
+            n = n_years)
   
   # Chance of having inaccurate weekly weather forecast, intervention 1
   inaccurate_forecast_i1 <- chance_event(chance_inaccurate_forecast_i1,
-                                         value_if = 1,
-                                         n = n_years)
+            value_if = 1,
+            n = n_years)
   
   # Chance of having inaccurate weekly weather forecast, intervention 2, 3, 4
   inaccurate_forecast_i234 <- chance_event(chance_inaccurate_forecast_i234,
-                                           value_if = 1, 
-                                           n = n_years)
+            value_if = 1, 
+            n = n_years)
   
   # Risk of having events can cause re-fertilize
   risk_refertilize_i1234 <- chance_event(chance_refertilize_i1234,
-                                         value_if = 1, 
-                                         n = n_years)
+            value_if = 1, 
+            n = n_years)
   
   # Risk of re_sow due to extreme events (rain, cold) 
   risk_resow_i1234<-chance_event(chance_resow_i1234,
-                                 value_if = 1, 
-                                 n = n_years)
+            value_if = 1, 
+            n = n_years)
   
   # 2. Calculating costs####
   
@@ -84,20 +84,20 @@ acis_costbenefit <- function(x, varnames){
   cost_new_met_station <- rep(0, n_years)
   
   cost_new_met_station[1] <- (met_station_esta_i1 + 
-                                vv(met_station_main_i1, 
-                                   var_CV, 1) + 
-                                cost_forecasts_access_i1)/exchange_rate
+            vv(met_station_main_i1, 
+            var_CV, 1) + 
+            cost_forecasts_access_i1)/exchange_rate
   
   cost_new_met_station[2:5] <- vv(met_station_main_i1,
-                                  var_CV, 4)/exchange_rate
+            var_CV, 4)/exchange_rate
   
   # Buy forecast from provincial meteorological station for the whole project period 
   # (Intervention1234)
   cost_forecast_province <- rep(0, n_years)
   
   cost_forecast_province[1:5] <- vv(cost_weekly_forecasts_i1234 +
-                                      cost_seasonal_forecasts_i1234, 
-                                    var_CV, n_years)/exchange_rate
+            cost_seasonal_forecasts_i1234, 
+            var_CV, n_years)/exchange_rate
   #2.2 Translation####
   
   # Translation from forecasts (training on translation) to advisory costs 
@@ -105,20 +105,20 @@ acis_costbenefit <- function(x, varnames){
   cost_translation <- rep(0, n_years)
   
   cost_translation[1:2] <- vv(cost_cb_translation_staff_i1234, 
-                              var_CV,2)*cb_translation_n12/exchange_rate
+            var_CV,2)*cb_translation_n12/exchange_rate
   
   cost_translation[3:5] <- vv(cost_cb_translation_staff_i1234, 
-                              var_CV,3)*cb_translation_n345/exchange_rate
+            var_CV,3)*cb_translation_n345/exchange_rate
   #2.3 Transfer####
   # Calculating total households and farm households in 5 years
   # https://socratic.org/questions/how-do-you-calculate-population-growth
   time <- 1:n_years
   
   total_households_i1234 <- vv(baseline_households_i1234, 
-                               var_CV, n_years)*exp(household_increase_rate*time)
+            var_CV, n_years)*exp(household_increase_rate*time)
   
   total_farm_households_i1234 <- vv(baseline_farm_households_i1234, var_CV, n_years)*
-    exp(household_increase_rate*time)
+            exp(household_increase_rate*time)
   
   # Transfer and communication costs: district and commune/village for 
   #the whole project period (Intervention1234)
@@ -126,16 +126,16 @@ acis_costbenefit <- function(x, varnames){
   cost_capacity_communication<-rep(0,n_years)
   
   cost_capacity_communication[1]<-(vv(cost_cb_commune_i1234, var_CV,1)*n_communes+
-  vv(leftlet_year1_i1234, var_CV,1)*vv(total_farm_households_i1234, var_CV,1)+
-  vv(village_meeting_launch_i1234, var_CV,1)*n_village+
-  vv(video_i1234_peryear, var_CV,1)+
-  vv(cost_print_seasonal_bulletinA0_i1234, var_CV,1)*
-  (n_village*n_per_village+n_communes)*n_print_per_year)/exchange_rate
+            vv(leftlet_year1_i1234, var_CV,1)*vv(total_farm_households_i1234, var_CV,1)+
+            vv(village_meeting_launch_i1234, var_CV,1)*n_village+
+            vv(video_i1234_peryear, var_CV,1)+
+            vv(cost_print_seasonal_bulletinA0_i1234, var_CV,1)*
+            (n_village*n_per_village+n_communes)*n_print_per_year)/exchange_rate
     
   cost_capacity_communication[2:5]<-(
-  vv(video_i1234_peryear, var_CV,4)+
-  vv(cost_print_seasonal_bulletinA0_i1234,var_CV,4)*
-  (n_village*n_per_village+n_communes)*n_print_per_year)/exchange_rate
+            vv(video_i1234_peryear, var_CV,4)+
+            vv(cost_print_seasonal_bulletinA0_i1234,var_CV,4)*
+            (n_village*n_per_village+n_communes)*n_print_per_year)/exchange_rate
     
   # Cost for sending SMS to rice farmers for the whole project period (Intervention12)
   cost_rice_SMS<- rep(0, n_years)
@@ -223,7 +223,7 @@ acis_costbenefit <- function(x, varnames){
   # Total cost for intervention 1####
   
   total_cost_i1<-cost_new_met_station+cost_forecast_province+
-  cost_translation+cost_capacity_communication+cost_rice_SMS+
+              cost_translation+cost_capacity_communication+cost_rice_SMS+
               cost_animal_SMS+cost_model+cost_gender+ME_cost
     
   # Total cost for intervention 2####
@@ -275,6 +275,8 @@ acis_costbenefit <- function(x, varnames){
     
   # Write the function for adoption, if adoption reaches to the peak,use saturated rate 
   adoptionrate<-function(p,q,n_years,dis_adoption,r_saturated)
+       # p: adoption rate in year 1
+       # q: annual adoption rate due to personal effect
        {
          r<-rep(0, n_years)
          for (t in c(2:n_years))
@@ -345,7 +347,7 @@ acis_costbenefit <- function(x, varnames){
   # taking into consideration of the chance to reduce the risk
   resow_reduced_i1234<-risk_resow_i1234*chance_resow_advice_i1234
        
-  # Benefit for time reduction in sowing for intervention 1 
+  # Benefit for times reduction in sowing for intervention 1 
   # Costs for sowing for 1 ha per year (equal to costs can be reduced if it can avoid)
   # No need to *2 for dose as the area is already*for two seasons
   
@@ -361,7 +363,7 @@ acis_costbenefit <- function(x, varnames){
               vv(resow_fer_area_percentage_i1234,var_CV_high,5)*
               seed_rate_i1*effective_rate/exchange_rate
            
-  # Benefit for time reduction in sowing for intervention 2 
+  # Benefit for times reduction in sowing for intervention 2 
   inaccurate_forecast_i234<-chance_event(chance_inaccurate_forecast_i234,value_if = 1, n=n_years)
   
   benefit_time_seed_i2<-rep(0,n_years)
@@ -372,7 +374,7 @@ acis_costbenefit <- function(x, varnames){
               vv(resow_fer_area_percentage_i1234,var_CV_high,5)*
               seed_rate_i2*effective_rate/exchange_rate
        
-  # Benefit for time reduction in sowing for intervention 3 
+  # Benefit for times reduction in sowing for intervention 3 
   
   benefit_time_seed_i3<-rep(0,n_years)
   
@@ -381,7 +383,7 @@ acis_costbenefit <- function(x, varnames){
             (reduce_resow_costsperha_i1234+labor_seed_fertilize_i1234)*
             vv(resow_fer_area_percentage_i1234,var_CV_high,5)*
             seed_rate_i3*effective_rate/exchange_rate
-  # Benefit for time reduction in sowing for intervention 4 
+  # Benefit for times reduction in sowing for intervention 4 
   
   benefit_time_seed_i4<-rep(0,n_years)
   benefit_time_seed_i4[1:5]<-resow_reduced_i1234*
@@ -478,7 +480,7 @@ acis_costbenefit <- function(x, varnames){
             N_baseline_i1234*N_price_i1234+
             K_baseline_i1234*K_price_i1234)/exchange_rate
     
-  # Benefit for time reduction for intervention 1 
+  # Benefit for times reduction for intervention 1 
   
   benefit_time_fer_i1<-rep(0,n_years)
   
@@ -489,7 +491,7 @@ acis_costbenefit <- function(x, varnames){
             rate_fer_pla_i1*
             effective_rate
        
-  # Benefit for time reduction for intervention 2 
+  # Benefit for times reduction for intervention 2 
   
   benefit_time_fer_i2<-rep(0,n_years)
   
@@ -501,7 +503,7 @@ acis_costbenefit <- function(x, varnames){
             rate_fer_pla_i2*
             effective_rate
       
-  # Benefit for time reduction for intervention 3
+  # Benefit for times reduction for intervention 3
   
   benefit_time_fer_i3<-rep(0,n_years)
   
@@ -512,7 +514,7 @@ acis_costbenefit <- function(x, varnames){
             rate_fer_pla_i3*
             effective_rate
            
-  # Benefit for time reduction for intervention 4
+  # Benefit for times reduction for intervention 4
   
   benefit_time_fer_i4<-rep(0,n_years)
   
@@ -541,7 +543,7 @@ acis_costbenefit <- function(x, varnames){
   
   change_cost_spray_perha<- (reduce_cost_spray_peryear_i1234-increase_cost_monitor_peryear_i1234)*10
       
-  # Benefit for time reduction for intervention 1 
+  # Benefit for times reduction for intervention 1 
   
   benefit_time_spray_i1<-rep(0,n_years)
   
@@ -550,7 +552,7 @@ acis_costbenefit <- function(x, varnames){
             (1-vv(rice_area_loss_severe_risks_i1234, var_CV,5))*
             rate_fer_pla_i1*effective_rate/exchange_rate
            
-  # Benefit for time reduction for intervention 2
+  # Benefit for times reduction for intervention 2
   
   benefit_time_spray_i2<-rep(0,n_years)
   
@@ -559,7 +561,7 @@ acis_costbenefit <- function(x, varnames){
             (1-vv(rice_area_loss_severe_risks_i1234, var_CV,5))*
             rate_fer_pla_i2*effective_rate/exchange_rate
            
-  # Benefit for time reduction for intervention 3
+  # Benefit for times reduction for intervention 3
   
   benefit_time_spray_i3<-rep(0,n_years)
   
@@ -568,7 +570,7 @@ acis_costbenefit <- function(x, varnames){
             (1-vv(rice_area_loss_severe_risks_i1234, var_CV,5))*
             rate_fer_pla_i3*effective_rate/exchange_rate
            
-  # Benefit for time reduction for intervention 4
+  # Benefit for times reduction for intervention 4
   
   benefit_time_spray_i4<-rep(0,n_years)
   
@@ -578,7 +580,7 @@ acis_costbenefit <- function(x, varnames){
     
   #3.1.1.5. Rice yield benefits#### 
   
-  # Rice yield benefit for Intervention 1
+  # Rice yield benefit for intervention 1
   
   rice_benefit_change_i1<-rep(0,n_years)
   
@@ -586,7 +588,7 @@ acis_costbenefit <- function(x, varnames){
             (1-vv(rice_area_loss_severe_risks_i1234, var_CV,5))*
             vv(yield_change_i1234, var_CV, 5)*rice_price*
             ((seed_rate_i1+2*rate_fer_pla_i1)/3)*effective_rate/exchange_rate
-  # Rice yield benefit for Intervention 2
+  # Rice yield benefit for intervention 2
   
   rice_benefit_change_i2<-rep(0,n_years)
   
@@ -595,7 +597,7 @@ acis_costbenefit <- function(x, varnames){
             vv(yield_change_i1234, var_CV, 5)*
             rice_price*
             ((seed_rate_i2+2*rate_fer_pla_i2)/3)*effective_rate/exchange_rate
-  # Rice yield benefit for Intervention 3
+  # Rice yield benefit for intervention 3
   
   rice_benefit_change_i3<-rep(0,n_years)
   
@@ -605,7 +607,7 @@ acis_costbenefit <- function(x, varnames){
             rice_price*
             ((seed_rate_i3+2*rate_fer_pla_i3)/3)*effective_rate/exchange_rate
   
-  # Rice yield benefit for Intervention 4
+  # Rice yield benefit for intervention 4
   
   rice_benefit_change_i4<-rep(0,n_years)
   
@@ -1022,7 +1024,7 @@ acis_costbenefit <- function(x, varnames){
   bottomline_benefiti1=total_benefiti1-total_cost_i1
     
   
-  # NPV Intervention 1####
+  # NPV intervention 1####
   
   NPV1<-discount(bottomline_benefiti1, discount_rate, calculate_NPV = TRUE)
     
@@ -1041,7 +1043,7 @@ acis_costbenefit <- function(x, varnames){
   # Annual bottom-line benefit intervention 2
   bottomline_benefiti2=total_benefiti2-total_cost_i2
     
-  # NPV Intervention 2####
+  # NPV intervention 2####
   NPV2<-discount(bottomline_benefiti2, discount_rate, calculate_NPV = TRUE)
     
   # Benefit-cost ratio intervention 2####
@@ -1056,7 +1058,7 @@ acis_costbenefit <- function(x, varnames){
   # Annual bottom-line benefit intervention 3
   bottomline_benefiti3=total_benefiti3-total_cost_i3
   
-  # NPV Intervention 3####
+  # NPV intervention 3####
   NPV3<-discount(bottomline_benefiti3, discount_rate, calculate_NPV = TRUE)
     
   # Benefit-cost ratio intervention 3####
@@ -1071,7 +1073,7 @@ acis_costbenefit <- function(x, varnames){
   # Annual bottom-line benefit intervention 4
   bottomline_benefiti4=total_benefiti4-total_cost_i4
     
-  # NPV Intervention 4####
+  # NPV intervention 4####
   NPV4<-discount(bottomline_benefiti4, discount_rate, calculate_NPV = TRUE)
     
   # Benefit-cost ratio intervention 4####

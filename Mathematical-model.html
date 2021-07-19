@@ -196,23 +196,28 @@ summary {
 
 <div id="TOC">
 <ul>
+<li><a href="#model-development-process">Model development process</a>
+<ul>
 <li><a href="#input-table">Input table</a></li>
 <li><a href="#implement-model-in-r">Implement model in R</a>
 <ul>
 <li><a href="#calculating-chance-event-of-risks-and-uncertainties">1. Calculating chance event of risks and uncertainties</a></li>
 <li><a href="#example-cost-calculation">2. Example: Cost calculation</a></li>
 <li><a href="#example-benefit-calculation">3. Example: Benefit calculation</a></li>
-<li><a href="#calculating-net-present-value">4. Calculating Net Present Value</a></li>
+<li><a href="#net-present-value-calculation">4. Net Present Value calculation</a></li>
 <li><a href="#simulate-and-analyze-data">5. Simulate and analyze data</a></li>
+</ul></li>
 </ul></li>
 <li><a href="#outcome-distribution-visualization">Outcome distribution visualization</a></li>
 <li><a href="#acknowledgements">Acknowledgements</a></li>
-<li><a href="#references">References</a></li>
 <li><a href="#annex-with-full-r-code-of-the-model">Annex with full R code of the model</a></li>
+<li><a href="#references">References</a></li>
 </ul>
 </div>
 
-<p>This document describes the model simulation used for forecasting the potential outcomes of four different Agro-climate services (ACS) interventions in Vietnam. The model is programmed with the <code>decisionSupport</code> package <span class="citation">(Luedeling, Goehring, and Schiffers 2020)</span>. The full model is available in the <a href="https://github.com/ThiThuGiangLuu/ACS-Decision-Analysis">ACS-Decision-Analysis repository</a>. # Model development process</p>
+<p>This document describes the model simulation used for forecasting the potential outcomes of four different Agro-climate services (ACS) interventions in Vietnam. The model is programmed with the <code>decisionSupport</code> package <span class="citation">(Luedeling, Goehring, and Schiffers 2020)</span>. The full model is available in the <a href="https://github.com/ThiThuGiangLuu/ACS-Decision-Analysis">ACS-Decision-Analysis repository</a>.</p>
+<div id="model-development-process" class="section level1">
+<h1>Model development process</h1>
 <p>The model described in this document was programmed in the R programming language <span class="citation">(R Core Team 2020)</span> using the <code>decisionSupport</code> library <span class="citation">(Luedeling, Goehring, and Schiffers 2020)</span> among others. The full model that is described here can be found in the <a href="https://github.com/ThiThuGiangLuu/ACS-Decision-Analysis">ACS-Decision-Analysis repository</a>. The document was generated with the Rmarkdown and knitr libraries <span class="citation">(Allaire et al. 2020; Xie 2020)</span>.</p>
 <div id="input-table" class="section level2">
 <h2>Input table</h2>
@@ -230,13 +235,13 @@ summary {
   
   make_variables(estimate_read_csv(&quot;acis_inputs_EN.csv&quot;))</code></pre>
 <p>The code described below is wrapped in a function called <code>acis_costbenefit</code> in the <a href="https://github.com/ThiThuGiangLuu/ACS-Decision-Analysis/blob/master/ACS%20decision%20analysis.R">ACS decision analysis.R file</a>. The function is used to calculate the Net Present Values (NPV) of the investment decision in ACS.</p>
-<p><em>Four ACS Interventions</em></p>
+<p><strong>Four ACS Interventions</strong></p>
 <p>The four Agro-climatic Services (ACS) interventions considered in the model include:</p>
 <ul>
-<li>Intervention 1: Weather station-SMS-gender</li>
-<li>Intervention 2: SMS-gender</li>
-<li>Intervention 3: SMS-loudspeaker</li>
-<li>Intervention 4: Paper-loudspeaker</li>
+<li>Intervention 1: Weather station-SMS-Gender</li>
+<li>Intervention 2: SMS-Gender</li>
+<li>Intervention 3: SMS-Loudspeaker</li>
+<li>Intervention 4: Paper-Loudspeaker</li>
 </ul>
 <p>The risks, costs and benefits of the four internetions include:</p>
 <ul>
@@ -251,14 +256,13 @@ summary {
 </ul>
 <div id="calculating-chance-event-of-risks-and-uncertainties" class="section level3">
 <h3>1. Calculating chance event of risks and uncertainties</h3>
-<p>We used the <code>chance_event()</code> function to simulate the risks of having extreme weather events, chances of having inaccurate forecasts and the chances that cause additional agricultural input application due to weather events. This function will simulate the chance if an event may occur or not. As a result, the values of dependent variables may vary depending on the occurrence of the events. The output of the simulation can be single or series of values. For example we calculated the drought risk for each year in intervention1, intervention2, intervention 3 and intervention 4 with the <code>chance_event</code> function, using <code>chance_drought_i1234</code> and <code>n_years</code> from the input table.</p>
+<p>We use the <code>chance_event()</code> function to simulate the risks of having extreme weather events, chances of having inaccurate forecasts and the chances that cause additional agricultural input application due to weather events. This function will simulate the chance if an event may occur or not. As a result, the values of dependent variables may vary depending on the occurrence of the events. The output of the simulation can be single or series of values. For example we calculated the drought risk for each year in intervention 1, intervention 2, intervention 3 and intervention 4 with the <code>chance_event</code> function, using <code>chance_drought_i1234</code> and <code>n_years</code> from the input table.</p>
 <pre class="r"><code>drought_risk_i1234 &lt;- chance_event(chance_drought_i1234, 
                                    value_if = 1, 
                                    n = n_years)
 
 drought_risk_i1234</code></pre>
-<pre><code>## [1] 0 0 0 1 1</code></pre>
-<p>We used the <code>vv()</code> function to introduce variation into time series variables. Inputs to run this function include the mean of the variable to be varied <code>var_mean</code>, desired coefficient of variation (in percent) <code>var_CV</code> and number of values to be produced <code>n</code>.</p>
+<pre><code>## [1] 0 0 0 0 0</code></pre>
 </div>
 <div id="example-cost-calculation" class="section level3">
 <h3>2. Example: Cost calculation</h3>
@@ -270,11 +274,12 @@ cost_forecast_province[1:5] &lt;- vv(cost_weekly_forecasts_i1234 +
                                     n_years)/exchange_rate
     
 cost_forecast_province</code></pre>
-<pre><code>## [1] 2193.976 2169.757 2237.691 2222.713 2293.736</code></pre>
+<pre><code>## [1] 2217.219 2233.806 2203.414 2256.630 2276.577</code></pre>
+<p>We use the <code>vv()</code> function to introduce variation into time series variables. Inputs to run this function include the mean of the variable to be varied <code>var_mean</code>, desired coefficient of variation (in percent) <code>var_CV</code> and number of values to be produced <code>n</code>.</p>
 </div>
 <div id="example-benefit-calculation" class="section level3">
 <h3>3. Example: Benefit calculation</h3>
-<p>We considered economic benefits such as potential benefits for rice plantation from drought advice at the start of the season. For example we use the <code>rice_area_drought_i1234</code> from the input table and <code>drought_risk_i1234</code> calculated above to create a drought area we called <code>rice_area_drought_i1234</code> for each year in intervention 1, intervention 2, intervention 3 and intervention 4.</p>
+<p>We consider economic benefits such as potential benefits for rice plantation from drought advice at the start of the season. For example, we use the <code>rice_area_drought_i1234</code> from the input table and <code>drought_risk_i1234</code> calculated above to create a drought area <code>rice_area_drought_i1234</code> for each year in intervention 1, intervention 2, intervention 3 and intervention 4.</p>
 <pre class="r"><code># Drought area for each year
 rice_drought_i1234&lt;-rep(0,n_years)
 rice_drought_i1234[1:5]&lt;-vv(rice_area_drought_i1234, var_CV, 5)*
@@ -285,13 +290,13 @@ reduced_drought_losses&lt;-rep(0, n_years)
 reduced_drought_losses[1:5]&lt;-vv(reduce_loss_drought_i1234,var_CV, 5)*
               vv(rice_drought_i1234,var_CV_high, 5)/exchange_rate</code></pre>
 </div>
-<div id="calculating-net-present-value" class="section level3">
-<h3>4. Calculating Net Present Value</h3>
+<div id="net-present-value-calculation" class="section level3">
+<h3>4. Net Present Value calculation</h3>
 <p>We calculate Net Present Values (NPV) and Benefit Cost Ratios (BCR) of the four ACS investment options from the values of total benefits, costs and <code>discount_rate</code>.</p>
 </div>
 <div id="simulate-and-analyze-data" class="section level3">
 <h3>5. Simulate and analyze data</h3>
-<p>We used the input table and the model to run a Monte Carlo Simulation with the <code>decisionSupport</code> function in the <code>decisionSupport</code> package <span class="citation">(Luedeling, Goehring, and Schiffers 2020)</span>. We define the number of model runs as of 10,000 models. We specify the <code>outputPath</code> to store decision outcome in specified folder <code>MCResults</code>.</p>
+<p>We use the input table and the model to run a Monte Carlo Simulation with the <code>decisionSupport</code> function in the <code>decisionSupport</code> package <span class="citation">(Luedeling, Goehring, and Schiffers 2020)</span>. We define the number of model runs as of 10,000 models. We specify the <code>outputPath</code> to store decision outcome in specified folder <code>MCResults</code>.</p>
 <pre class="r"><code>  decisionSupport::decisionSupport(
   &quot;acis_inputs_EN.csv&quot;,
   outputPath = paste(&quot;MCResults&quot;, sep = &quot;&quot;),
@@ -300,19 +305,17 @@ reduced_drought_losses[1:5]&lt;-vv(reduce_loss_drought_i1234,var_CV, 5)*
   functionSyntax = &quot;plainNames&quot;)</code></pre>
 </div>
 </div>
-<div id="outcome-distribution-visualization" class="section level2">
-<h2>Outcome distribution visualization</h2>
-<p>We extracted Net Present Values (NPV) and Benefit Cost Ratios (BCRs) from the file <code>MCResults\mcSimulationResults.csv</code> generated by the <code>decisionSupport</code> function <span class="citation">(Luedeling, Goehring, and Schiffers 2020)</span>. We then visualize the probability distribution of NPVs and BCRs using <code>ggplot2</code> package <span class="citation">(Wickham et al. 2020)</span>. We combine the 2 graphs into a single graphs using <code>cowplot</code> package <span class="citation">(Wilke 2020)</span>.</p>
 </div>
-<div id="acknowledgements" class="section level2">
-<h2>Acknowledgements</h2>
+<div id="outcome-distribution-visualization" class="section level1">
+<h1>Outcome distribution visualization</h1>
+<p>We extract Net Present Values (NPV) and Benefit Cost Ratios (BCRs) from the file <code>MCResults\mcSimulationResults.csv</code> generated by the <code>decisionSupport</code> function <span class="citation">(Luedeling, Goehring, and Schiffers 2020)</span>. We then visualize the probability distribution of NPVs and BCRs using <code>ggplot2</code> package <span class="citation">(Wickham et al. 2020)</span>. We combine the 2 graphs into a single graphs using <code>cowplot</code> package <span class="citation">(Wilke 2020)</span>.</p>
+</div>
+<div id="acknowledgements" class="section level1">
+<h1>Acknowledgements</h1>
 <p>We acknowledge the valuable support from CARE in Vietnam and the Centre of Community Development (CCD). We thank the Schlumberger Foundation for providing a scholarship for the main author. We value the participation and support from expert team through out this study.</p>
 </div>
-<div id="references" class="section level2">
-<h2>References</h2>
-</div>
-<div id="annex-with-full-r-code-of-the-model" class="section level2">
-<h2>Annex with full R code of the model</h2>
+<div id="annex-with-full-r-code-of-the-model" class="section level1">
+<h1>Annex with full R code of the model</h1>
 <pre class="r"><code>#install.packages(&quot;decisionSupport&quot;)
 library(decisionSupport)
 
@@ -337,14 +340,14 @@ acis_costbenefit &lt;- function(x, varnames){
   # Intervention 4: Paper-loudspeaker
   
   # Risks, costs and benefits include: 
-  # i1: risk/cost/benefit variable incurred for intervention1
-  # i2: risk/cost/benefit variable incurred for intervention2
-  # i3: risk/cost/benefit variable incurred for intervention3
-  # i4: risk/cost/benefit variable incurred for intervention4
-  # i12: risk/cost/benefit variable incurred for intervention1 and intervention 2
-  # i234: risk/cost/benefit for intervention2, intervention3 and intervention 4
-  # i34: risk/cost/benefit for intervention3 and intervention 4
-  # i1234: risk/cost/benefit for all intervention1, intervention2, intervention 3 and intervention 4
+  # i1: risk/cost/benefit variable incurred for intervention 1
+  # i2: risk/cost/benefit variable incurred for intervention 2
+  # i3: risk/cost/benefit variable incurred for intervention 3
+  # i4: risk/cost/benefit variable incurred for intervention 4
+  # i12: risk/cost/benefit variable incurred for intervention 1 and intervention 2
+  # i234: risk/cost/benefit for intervention 2, intervention3 and intervention 4
+  # i34: risk/cost/benefit for intervention 3 and intervention 4
+  # i1234: risk/cost/benefit for all intervention 1, intervention 2, intervention 3 and intervention 4
   
   # Risks that impact benefits
   # inaccurate forecasts:  risk which is on-going every season/year
@@ -354,43 +357,43 @@ acis_costbenefit &lt;- function(x, varnames){
   
   # Drought risk for each year
   drought_risk_i1234 &lt;- chance_event(chance_drought_i1234,
-                                     value_if = 1, 
-                                     n = n_years)
+            value_if = 1, 
+            n = n_years)
   
   # Chance of having inaccurate drought forecast at the beginning of season intervention 1, 2, 3, 4
   inaccurate_forecast_extreme_drought_i1234 &lt;- chance_event(chance_inaccurate_forecast_extreme_drought_i1234,
-                                                            value_if = 1, 
-                                                            n = n_years)
+            value_if = 1, 
+            n = n_years)
   
   # Extreme cold risk for each year
   risk_extreme_cold &lt;- chance_event(chance_extreme_cold,
-                                    value_if = 1, 
-                                    n = n_years)
+            value_if = 1, 
+            n = n_years)
   
   # Chance of having inaccurate extreme cold forecast 
   inaccurate_forecast_extreme_cold_i1234 &lt;- chance_event(chance_inaccurate_forecast_extreme_cold_i1234,
-                                                         value_if = 1, 
-                                                         n = n_years)
+            value_if = 1, 
+            n = n_years)
   
   # Chance of having inaccurate weekly weather forecast, intervention 1
   inaccurate_forecast_i1 &lt;- chance_event(chance_inaccurate_forecast_i1,
-                                         value_if = 1,
-                                         n = n_years)
+            value_if = 1,
+            n = n_years)
   
   # Chance of having inaccurate weekly weather forecast, intervention 2, 3, 4
   inaccurate_forecast_i234 &lt;- chance_event(chance_inaccurate_forecast_i234,
-                                           value_if = 1, 
-                                           n = n_years)
+            value_if = 1, 
+            n = n_years)
   
   # Risk of having events can cause re-fertilize
   risk_refertilize_i1234 &lt;- chance_event(chance_refertilize_i1234,
-                                         value_if = 1, 
-                                         n = n_years)
+            value_if = 1, 
+            n = n_years)
   
   # Risk of re_sow due to extreme events (rain, cold) 
   risk_resow_i1234&lt;-chance_event(chance_resow_i1234,
-                                 value_if = 1, 
-                                 n = n_years)
+            value_if = 1, 
+            n = n_years)
   
   # 2. Calculating costs####
   
@@ -399,20 +402,20 @@ acis_costbenefit &lt;- function(x, varnames){
   cost_new_met_station &lt;- rep(0, n_years)
   
   cost_new_met_station[1] &lt;- (met_station_esta_i1 + 
-                                vv(met_station_main_i1, 
-                                   var_CV, 1) + 
-                                cost_forecasts_access_i1)/exchange_rate
+            vv(met_station_main_i1, 
+            var_CV, 1) + 
+            cost_forecasts_access_i1)/exchange_rate
   
   cost_new_met_station[2:5] &lt;- vv(met_station_main_i1,
-                                  var_CV, 4)/exchange_rate
+            var_CV, 4)/exchange_rate
   
   # Buy forecast from provincial meteorological station for the whole project period 
   # (Intervention1234)
   cost_forecast_province &lt;- rep(0, n_years)
   
   cost_forecast_province[1:5] &lt;- vv(cost_weekly_forecasts_i1234 +
-                                      cost_seasonal_forecasts_i1234, 
-                                    var_CV, n_years)/exchange_rate
+            cost_seasonal_forecasts_i1234, 
+            var_CV, n_years)/exchange_rate
   #2.2 Translation####
   
   # Translation from forecasts (training on translation) to advisory costs 
@@ -420,20 +423,20 @@ acis_costbenefit &lt;- function(x, varnames){
   cost_translation &lt;- rep(0, n_years)
   
   cost_translation[1:2] &lt;- vv(cost_cb_translation_staff_i1234, 
-                              var_CV,2)*cb_translation_n12/exchange_rate
+            var_CV,2)*cb_translation_n12/exchange_rate
   
   cost_translation[3:5] &lt;- vv(cost_cb_translation_staff_i1234, 
-                              var_CV,3)*cb_translation_n345/exchange_rate
+            var_CV,3)*cb_translation_n345/exchange_rate
   #2.3 Transfer####
   # Calculating total households and farm households in 5 years
   # https://socratic.org/questions/how-do-you-calculate-population-growth
   time &lt;- 1:n_years
   
   total_households_i1234 &lt;- vv(baseline_households_i1234, 
-                               var_CV, n_years)*exp(household_increase_rate*time)
+            var_CV, n_years)*exp(household_increase_rate*time)
   
   total_farm_households_i1234 &lt;- vv(baseline_farm_households_i1234, var_CV, n_years)*
-    exp(household_increase_rate*time)
+            exp(household_increase_rate*time)
   
   # Transfer and communication costs: district and commune/village for 
   #the whole project period (Intervention1234)
@@ -441,16 +444,16 @@ acis_costbenefit &lt;- function(x, varnames){
   cost_capacity_communication&lt;-rep(0,n_years)
   
   cost_capacity_communication[1]&lt;-(vv(cost_cb_commune_i1234, var_CV,1)*n_communes+
-  vv(leftlet_year1_i1234, var_CV,1)*vv(total_farm_households_i1234, var_CV,1)+
-  vv(village_meeting_launch_i1234, var_CV,1)*n_village+
-  vv(video_i1234_peryear, var_CV,1)+
-  vv(cost_print_seasonal_bulletinA0_i1234, var_CV,1)*
-  (n_village*n_per_village+n_communes)*n_print_per_year)/exchange_rate
+            vv(leftlet_year1_i1234, var_CV,1)*vv(total_farm_households_i1234, var_CV,1)+
+            vv(village_meeting_launch_i1234, var_CV,1)*n_village+
+            vv(video_i1234_peryear, var_CV,1)+
+            vv(cost_print_seasonal_bulletinA0_i1234, var_CV,1)*
+            (n_village*n_per_village+n_communes)*n_print_per_year)/exchange_rate
     
   cost_capacity_communication[2:5]&lt;-(
-  vv(video_i1234_peryear, var_CV,4)+
-  vv(cost_print_seasonal_bulletinA0_i1234,var_CV,4)*
-  (n_village*n_per_village+n_communes)*n_print_per_year)/exchange_rate
+            vv(video_i1234_peryear, var_CV,4)+
+            vv(cost_print_seasonal_bulletinA0_i1234,var_CV,4)*
+            (n_village*n_per_village+n_communes)*n_print_per_year)/exchange_rate
     
   # Cost for sending SMS to rice farmers for the whole project period (Intervention12)
   cost_rice_SMS&lt;- rep(0, n_years)
@@ -538,7 +541,7 @@ acis_costbenefit &lt;- function(x, varnames){
   # Total cost for intervention 1####
   
   total_cost_i1&lt;-cost_new_met_station+cost_forecast_province+
-  cost_translation+cost_capacity_communication+cost_rice_SMS+
+              cost_translation+cost_capacity_communication+cost_rice_SMS+
               cost_animal_SMS+cost_model+cost_gender+ME_cost
     
   # Total cost for intervention 2####
@@ -590,6 +593,8 @@ acis_costbenefit &lt;- function(x, varnames){
     
   # Write the function for adoption, if adoption reaches to the peak,use saturated rate 
   adoptionrate&lt;-function(p,q,n_years,dis_adoption,r_saturated)
+       # p: adoption rate in year 1
+       # q: annual adoption rate due to personal effect
        {
          r&lt;-rep(0, n_years)
          for (t in c(2:n_years))
@@ -660,7 +665,7 @@ acis_costbenefit &lt;- function(x, varnames){
   # taking into consideration of the chance to reduce the risk
   resow_reduced_i1234&lt;-risk_resow_i1234*chance_resow_advice_i1234
        
-  # Benefit for time reduction in sowing for intervention 1 
+  # Benefit for times reduction in sowing for intervention 1 
   # Costs for sowing for 1 ha per year (equal to costs can be reduced if it can avoid)
   # No need to *2 for dose as the area is already*for two seasons
   
@@ -676,7 +681,7 @@ acis_costbenefit &lt;- function(x, varnames){
               vv(resow_fer_area_percentage_i1234,var_CV_high,5)*
               seed_rate_i1*effective_rate/exchange_rate
            
-  # Benefit for time reduction in sowing for intervention 2 
+  # Benefit for times reduction in sowing for intervention 2 
   inaccurate_forecast_i234&lt;-chance_event(chance_inaccurate_forecast_i234,value_if = 1, n=n_years)
   
   benefit_time_seed_i2&lt;-rep(0,n_years)
@@ -687,7 +692,7 @@ acis_costbenefit &lt;- function(x, varnames){
               vv(resow_fer_area_percentage_i1234,var_CV_high,5)*
               seed_rate_i2*effective_rate/exchange_rate
        
-  # Benefit for time reduction in sowing for intervention 3 
+  # Benefit for times reduction in sowing for intervention 3 
   
   benefit_time_seed_i3&lt;-rep(0,n_years)
   
@@ -696,7 +701,7 @@ acis_costbenefit &lt;- function(x, varnames){
             (reduce_resow_costsperha_i1234+labor_seed_fertilize_i1234)*
             vv(resow_fer_area_percentage_i1234,var_CV_high,5)*
             seed_rate_i3*effective_rate/exchange_rate
-  # Benefit for time reduction in sowing for intervention 4 
+  # Benefit for times reduction in sowing for intervention 4 
   
   benefit_time_seed_i4&lt;-rep(0,n_years)
   benefit_time_seed_i4[1:5]&lt;-resow_reduced_i1234*
@@ -793,7 +798,7 @@ acis_costbenefit &lt;- function(x, varnames){
             N_baseline_i1234*N_price_i1234+
             K_baseline_i1234*K_price_i1234)/exchange_rate
     
-  # Benefit for time reduction for intervention 1 
+  # Benefit for times reduction for intervention 1 
   
   benefit_time_fer_i1&lt;-rep(0,n_years)
   
@@ -804,7 +809,7 @@ acis_costbenefit &lt;- function(x, varnames){
             rate_fer_pla_i1*
             effective_rate
        
-  # Benefit for time reduction for intervention 2 
+  # Benefit for times reduction for intervention 2 
   
   benefit_time_fer_i2&lt;-rep(0,n_years)
   
@@ -816,7 +821,7 @@ acis_costbenefit &lt;- function(x, varnames){
             rate_fer_pla_i2*
             effective_rate
       
-  # Benefit for time reduction for intervention 3
+  # Benefit for times reduction for intervention 3
   
   benefit_time_fer_i3&lt;-rep(0,n_years)
   
@@ -827,7 +832,7 @@ acis_costbenefit &lt;- function(x, varnames){
             rate_fer_pla_i3*
             effective_rate
            
-  # Benefit for time reduction for intervention 4
+  # Benefit for times reduction for intervention 4
   
   benefit_time_fer_i4&lt;-rep(0,n_years)
   
@@ -856,7 +861,7 @@ acis_costbenefit &lt;- function(x, varnames){
   
   change_cost_spray_perha&lt;- (reduce_cost_spray_peryear_i1234-increase_cost_monitor_peryear_i1234)*10
       
-  # Benefit for time reduction for intervention 1 
+  # Benefit for times reduction for intervention 1 
   
   benefit_time_spray_i1&lt;-rep(0,n_years)
   
@@ -865,7 +870,7 @@ acis_costbenefit &lt;- function(x, varnames){
             (1-vv(rice_area_loss_severe_risks_i1234, var_CV,5))*
             rate_fer_pla_i1*effective_rate/exchange_rate
            
-  # Benefit for time reduction for intervention 2
+  # Benefit for times reduction for intervention 2
   
   benefit_time_spray_i2&lt;-rep(0,n_years)
   
@@ -874,7 +879,7 @@ acis_costbenefit &lt;- function(x, varnames){
             (1-vv(rice_area_loss_severe_risks_i1234, var_CV,5))*
             rate_fer_pla_i2*effective_rate/exchange_rate
            
-  # Benefit for time reduction for intervention 3
+  # Benefit for times reduction for intervention 3
   
   benefit_time_spray_i3&lt;-rep(0,n_years)
   
@@ -883,7 +888,7 @@ acis_costbenefit &lt;- function(x, varnames){
             (1-vv(rice_area_loss_severe_risks_i1234, var_CV,5))*
             rate_fer_pla_i3*effective_rate/exchange_rate
            
-  # Benefit for time reduction for intervention 4
+  # Benefit for times reduction for intervention 4
   
   benefit_time_spray_i4&lt;-rep(0,n_years)
   
@@ -893,7 +898,7 @@ acis_costbenefit &lt;- function(x, varnames){
     
   #3.1.1.5. Rice yield benefits#### 
   
-  # Rice yield benefit for Intervention 1
+  # Rice yield benefit for intervention 1
   
   rice_benefit_change_i1&lt;-rep(0,n_years)
   
@@ -901,7 +906,7 @@ acis_costbenefit &lt;- function(x, varnames){
             (1-vv(rice_area_loss_severe_risks_i1234, var_CV,5))*
             vv(yield_change_i1234, var_CV, 5)*rice_price*
             ((seed_rate_i1+2*rate_fer_pla_i1)/3)*effective_rate/exchange_rate
-  # Rice yield benefit for Intervention 2
+  # Rice yield benefit for intervention 2
   
   rice_benefit_change_i2&lt;-rep(0,n_years)
   
@@ -910,7 +915,7 @@ acis_costbenefit &lt;- function(x, varnames){
             vv(yield_change_i1234, var_CV, 5)*
             rice_price*
             ((seed_rate_i2+2*rate_fer_pla_i2)/3)*effective_rate/exchange_rate
-  # Rice yield benefit for Intervention 3
+  # Rice yield benefit for intervention 3
   
   rice_benefit_change_i3&lt;-rep(0,n_years)
   
@@ -920,7 +925,7 @@ acis_costbenefit &lt;- function(x, varnames){
             rice_price*
             ((seed_rate_i3+2*rate_fer_pla_i3)/3)*effective_rate/exchange_rate
   
-  # Rice yield benefit for Intervention 4
+  # Rice yield benefit for intervention 4
   
   rice_benefit_change_i4&lt;-rep(0,n_years)
   
@@ -1337,7 +1342,7 @@ acis_costbenefit &lt;- function(x, varnames){
   bottomline_benefiti1=total_benefiti1-total_cost_i1
     
   
-  # NPV Intervention 1####
+  # NPV intervention 1####
   
   NPV1&lt;-discount(bottomline_benefiti1, discount_rate, calculate_NPV = TRUE)
     
@@ -1356,7 +1361,7 @@ acis_costbenefit &lt;- function(x, varnames){
   # Annual bottom-line benefit intervention 2
   bottomline_benefiti2=total_benefiti2-total_cost_i2
     
-  # NPV Intervention 2####
+  # NPV intervention 2####
   NPV2&lt;-discount(bottomline_benefiti2, discount_rate, calculate_NPV = TRUE)
     
   # Benefit-cost ratio intervention 2####
@@ -1371,7 +1376,7 @@ acis_costbenefit &lt;- function(x, varnames){
   # Annual bottom-line benefit intervention 3
   bottomline_benefiti3=total_benefiti3-total_cost_i3
   
-  # NPV Intervention 3####
+  # NPV intervention 3####
   NPV3&lt;-discount(bottomline_benefiti3, discount_rate, calculate_NPV = TRUE)
     
   # Benefit-cost ratio intervention 3####
@@ -1386,7 +1391,7 @@ acis_costbenefit &lt;- function(x, varnames){
   # Annual bottom-line benefit intervention 4
   bottomline_benefiti4=total_benefiti4-total_cost_i4
     
-  # NPV Intervention 4####
+  # NPV intervention 4####
   NPV4&lt;-discount(bottomline_benefiti4, discount_rate, calculate_NPV = TRUE)
     
   # Benefit-cost ratio intervention 4####
@@ -1440,6 +1445,9 @@ acis_costbenefit &lt;- function(x, varnames){
   
   #write.csv(mcSimulation_results$x, file=&quot;x.csv&quot;)
   #write.csv(mcSimulation_results$y, file=&quot;y.csv&quot;)</code></pre>
+</div>
+<div id="references" class="section level1 unnumbered">
+<h1 class="unnumbered">References</h1>
 <div id="refs" class="references csl-bib-body hanging-indent">
 <div id="ref-R-rmarkdown" class="csl-entry">
 Allaire, JJ, Yihui Xie, Jonathan McPherson, Javier Luraschi, Kevin Ushey, Aron Atkins, Hadley Wickham, Joe Cheng, Winston Chang, and Richard Iannone. 2020. <em>Rmarkdown: Dynamic Documents for r</em>. <a href="https://github.com/rstudio/rmarkdown">https://github.com/rstudio/rmarkdown</a>.

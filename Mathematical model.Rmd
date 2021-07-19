@@ -30,6 +30,7 @@ knitr::write_bib(c(.packages(),
 ```
 
 This document describes the model simulation used for forecasting the potential outcomes of four different Agro-climate services (ACS) interventions in Vietnam. The model is programmed with the `decisionSupport` package [@R-decisionSupport]. The full model is available in the [ACS-Decision-Analysis repository](https://github.com/ThiThuGiangLuu/ACS-Decision-Analysis). 
+
 # Model development process
 
 The model described in this document was programmed in the R programming language [@R-base] using the `decisionSupport` library [@R-decisionSupport] among others. The full model that is described here can be found in the [ACS-Decision-Analysis repository](https://github.com/ThiThuGiangLuu/ACS-Decision-Analysis). The document was generated with the Rmarkdown and knitr libraries [@R-rmarkdown; @R-knitr].
@@ -56,14 +57,14 @@ make_variables <- function(est, n = 1)
 
 The code described below is wrapped in a function called `acis_costbenefit` in the [ACS decision analysis.R file](https://github.com/ThiThuGiangLuu/ACS-Decision-Analysis/blob/master/ACS%20decision%20analysis.R). The function is used to calculate the Net Present Values (NPV) of the investment decision in ACS. 
 
-*Four ACS Interventions* 
+**Four ACS Interventions**
 
 The four Agro-climatic Services (ACS) interventions considered in the model include:
 
-- Intervention 1: Weather station-SMS-gender
-- Intervention 2: SMS-gender
-- Intervention 3: SMS-loudspeaker
-- Intervention 4: Paper-loudspeaker
+- Intervention 1: Weather station-SMS-Gender
+- Intervention 2: SMS-Gender
+- Intervention 3: SMS-Loudspeaker
+- Intervention 4: Paper-Loudspeaker
     
 The risks, costs and benefits of the four internetions include: 
 
@@ -77,8 +78,7 @@ The risks, costs and benefits of the four internetions include:
 - i1234: risk/cost/benefit for all intervention 1, intervention 2, intervention 3 and intervention 4
 
 ### 1. Calculating chance event of risks and uncertainties
-
-We used the `chance_event()` function to simulate the risks of having extreme weather events, chances of having inaccurate forecasts and the chances that cause additional agricultural input application due to weather events. This function will simulate the chance if an event may occur or not. As a result, the values of dependent variables may vary depending on the occurrence of the events. The output of the simulation can be single or series of values. For example we calculated the drought risk for each year in intervention1, intervention2, intervention 3 and intervention 4 with the `chance_event` function, using `chance_drought_i1234` and `n_years` from the input table.
+We use the `chance_event()` function to simulate the risks of having extreme weather events, chances of having inaccurate forecasts and the chances that cause additional agricultural input application due to weather events. This function will simulate the chance if an event may occur or not. As a result, the values of dependent variables may vary depending on the occurrence of the events. The output of the simulation can be single or series of values. For example we calculated the drought risk for each year in intervention 1, intervention 2, intervention 3 and intervention 4 with the `chance_event` function, using `chance_drought_i1234` and `n_years` from the input table.
 
 ```{r chance_event}
 drought_risk_i1234 <- chance_event(chance_drought_i1234, 
@@ -88,10 +88,8 @@ drought_risk_i1234 <- chance_event(chance_drought_i1234,
 drought_risk_i1234
 ```
 
-We used the `vv()` function to introduce variation into time series variables. Inputs to run this function include the mean of the variable to be varied `var_mean`, desired coefficient of variation (in percent) `var_CV` and number of values to be produced `n`. 
 
 ### 2. Example: Cost calculation
-
 We use `cost_weekly_forecasts_i1234` and `cost_seasonal_forecasts_i1234` from input tables to calculate the costs of buying weather forecasts from provincial meteorological station for for each year in intervention 1, intervention 2, intervention 3 and intervention 4: 
 
 ```{r}
@@ -104,8 +102,10 @@ cost_forecast_province[1:5] <- vv(cost_weekly_forecasts_i1234 +
 cost_forecast_province
 ```
 
+We use the `vv()` function to introduce variation into time series variables. Inputs to run this function include the mean of the variable to be varied `var_mean`, desired coefficient of variation (in percent) `var_CV` and number of values to be produced `n`. 
+
 ### 3. Example: Benefit calculation
-We considered economic benefits such as potential benefits for rice plantation from drought advice at the start of the season. For example we use the `rice_area_drought_i1234` from the input table and `drought_risk_i1234` calculated above to create a drought area we called `rice_area_drought_i1234` for each year in intervention 1, intervention 2, intervention 3 and intervention 4. 
+We consider economic benefits such as potential benefits for rice plantation from drought advice at the start of the season. For example, we use the `rice_area_drought_i1234` from the input table and `drought_risk_i1234` calculated above to create a drought area  `rice_area_drought_i1234` for each year in intervention 1, intervention 2, intervention 3 and intervention 4. 
 
 ```{r}
 # Drought area for each year
@@ -123,12 +123,11 @@ reduced_drought_losses[1:5]<-vv(reduce_loss_drought_i1234,var_CV, 5)*
               vv(rice_drought_i1234,var_CV_high, 5)/exchange_rate
 ```
 
-### 4. Calculating Net Present Value 
-
+### 4. Net Present Value calculation
 We calculate Net Present Values (NPV) and Benefit Cost Ratios (BCR) of the four ACS investment options from the values of total benefits, costs and `discount_rate`. 
 
 ### 5. Simulate and analyze data
-We used the input table and the model to run a Monte Carlo Simulation with the `decisionSupport` function in the `decisionSupport` package [@R-decisionSupport]. We define the number of model runs as of 10,000 models. We specify the `outputPath` to store decision outcome in specified folder `MCResults`.
+We use the input table and the model to run a Monte Carlo Simulation with the `decisionSupport` function in the `decisionSupport` package [@R-decisionSupport]. We define the number of model runs as of 10,000 models. We specify the `outputPath` to store decision outcome in specified folder `MCResults`.
 
 ```{r eval=FALSE}
   decisionSupport::decisionSupport(
@@ -140,19 +139,21 @@ We used the input table and the model to run a Monte Carlo Simulation with the `
   
 ```
 
-## Outcome distribution visualization
+# Outcome distribution visualization
 
-We extracted Net Present Values (NPV) and Benefit Cost Ratios (BCRs) from the file `MCResults\mcSimulationResults.csv` generated by the `decisionSupport` function [@R-decisionSupport]. We then visualize the probability distribution of NPVs and BCRs using `ggplot2` package [@R-ggplot2]. We combine the 2 graphs into a single graphs using `cowplot` package [@R-cowplot].  
+We extract Net Present Values (NPV) and Benefit Cost Ratios (BCRs) from the file `MCResults\mcSimulationResults.csv` generated by the `decisionSupport` function [@R-decisionSupport]. We then visualize the probability distribution of NPVs and BCRs using `ggplot2` package [@R-ggplot2]. We combine the 2 graphs into a single graphs using `cowplot` package [@R-cowplot].  
 
-## Acknowledgements
+# Acknowledgements
 
 We acknowledge the valuable support from CARE in Vietnam and the Centre of Community Development (CCD). We thank the Schlumberger Foundation for providing a scholarship for the main author. We value the participation and support from expert team through out this study.  
 
-## References
-
-## Annex with full R code of the model
+# Annex with full R code of the model
 
 ```{r, warning=FALSE, code=xfun::read_utf8('ACS decision analysis.R')}
+
 ```
+
+# References
+
 
 
